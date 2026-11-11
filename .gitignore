@@ -4,3 +4,6 @@ data/
 .vscode/
 *.iml
 .DS_Store
+.env
+.env.*
+!.env.example

@@ -6,6 +6,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -13,25 +14,56 @@ import java.util.UUID;
 
 /** Owns one disposable H2 database for one measured strategy run. */
 final class RaceSimulationDatabase implements AutoCloseable {
-    final DriverManagerDataSource dataSource;
+    final DataSource dataSource;
     final JdbcTemplate jdbc;
     final Store store;
-    final JdbcTransactionManager transactionManager;
+    final PlatformTransactionManager transactionManager;
     final InventoryService inventory;
-    private final Connection keepAlive;
+    private final AutoCloseable closeAction;
 
     RaceSimulationDatabase(Models.RaceInput input) {
-        dataSource = new DriverManagerDataSource(
+        this(input, embeddedSource());
+    }
+
+    private RaceSimulationDatabase(Models.RaceInput input, SimulationSource source) {
+        this.dataSource = source.dataSource();
+        this.closeAction = source.keepAlive()::close;
+        this.jdbc = new JdbcTemplate(dataSource);
+        this.store = new Store(jdbc);
+        this.transactionManager = new JdbcTransactionManager(dataSource);
+        this.inventory = new InventoryService(store, transactionManager, Duration.ZERO);
+        initialize(input);
+    }
+
+    RaceSimulationDatabase(Models.RaceInput input, DataSource dataSource, boolean migrate,
+                           AutoCloseable closeAction) {
+        this.dataSource = dataSource;
+        this.closeAction = closeAction;
+        if (migrate) {
+            Flyway.configure().dataSource(dataSource).locations("classpath:db/migration").load().migrate();
+        }
+        this.jdbc = new JdbcTemplate(dataSource);
+        this.store = new Store(jdbc);
+        this.transactionManager = new JdbcTransactionManager(dataSource);
+        this.inventory = new InventoryService(store, transactionManager, Duration.ZERO);
+        initialize(input);
+    }
+
+    private static SimulationSource embeddedSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource(
             "jdbc:h2:mem:race-" + UUID.randomUUID() + ";LOCK_TIMEOUT=4000", "sa", "");
         try {
-            keepAlive = dataSource.getConnection();
+            Connection keepAlive = dataSource.getConnection();
             Flyway.configure().dataSource(dataSource).locations("classpath:db/migration").load().migrate();
+            return new SimulationSource(dataSource, keepAlive);
         } catch (SQLException failure) {
             throw new IllegalStateException("Could not create the isolated simulation database.", failure);
         }
-        jdbc = new JdbcTemplate(dataSource);
-        store = new Store(jdbc);
-        transactionManager = new JdbcTransactionManager(dataSource);
+    }
+
+    private record SimulationSource(DataSource dataSource, Connection keepAlive) {}
+
+    private void initialize(Models.RaceInput input) {
         jdbc.update("INSERT INTO products VALUES ('RACE-01', 'Race Demo Item', 'Demo')");
         for (int warehouse = 0; warehouse < input.warehouses(); warehouse++) {
             String code = "W%02d".formatted(warehouse + 1);
@@ -46,14 +78,13 @@ final class RaceSimulationDatabase implements AutoCloseable {
             jdbc.update("INSERT INTO stock_thresholds VALUES ('RACE-01', ?, 5)", code);
         }
         new InventoryLedgerBootstrap(store, transactionManager).initialize();
-        inventory = new InventoryService(store, transactionManager, Duration.ZERO);
     }
 
     @Override
     public void close() {
         try {
-            keepAlive.close();
-        } catch (SQLException failure) {
+            closeAction.close();
+        } catch (Exception failure) {
             throw new IllegalStateException("Could not close the isolated simulation database.", failure);
         }
     }

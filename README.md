@@ -1,6 +1,6 @@
 # Stockline
 
-A multi-warehouse inventory and order management project built with Java 17, Spring Boot, Spring JDBC, H2, and a browser dashboard. The app reserves stock across warehouses and fulfills orders through a durable background queue.
+A multi-warehouse inventory and order management project built with Java 17, Spring Boot, Spring JDBC, PostgreSQL or H2, and a browser dashboard. The app reserves stock across warehouses and fulfills orders through a durable background queue.
 
 ## Run from source
 
@@ -18,6 +18,21 @@ Open [http://localhost:8080](http://localhost:8080). Stop the server with **Ctrl
 The build packages the dashboard, web server, and database engine in an executable JAR. The first launch seeds three warehouses and five products. The database file is created under `data/` in the working directory. Orders, stock changes, and pending events persist across restarts. Run from the same folder to reopen the same database.
 
 If port 8080 is occupied, run `java -jar target/stockline-1.0.0.jar --server.port=8081` and open [http://localhost:8081](http://localhost:8081).
+
+## PostgreSQL with Docker Compose
+
+For the PostgreSQL-backed deployment, copy `.env.example` to `.env` and replace the example password with a strong local value. Then start both services:
+
+```sh
+cp .env.example .env
+docker compose up --build
+```
+
+Compose waits for PostgreSQL's readiness check before starting the app. Open [http://localhost:8080](http://localhost:8080); check progress with `docker compose logs -f app`. Stop services with `docker compose down`. The `stockline-postgres` volume preserves database data across restarts and `down`; `docker compose down -v` removes the volume and its data.
+
+The local H2 profile remains the default (`dev`) and stores its database in `data/`. `test` uses in-memory H2. `postgres` and `prod` require `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD`; pool sizes and connection timeout can be set with `DB_POOL_MAX`, `DB_POOL_MIN_IDLE`, and `DB_CONNECTION_TIMEOUT_MS`.
+
+Flyway migrations are under `src/main/resources/db/migration/`. New databases apply V1 through the latest version. A non-empty pre-Flyway database is baselined at version 0 and receives the idempotent migrations without replaying seed inserts or changing balances. The migrations do not drop application tables. Back up a production database before deploying any application upgrade.
 
 ## Walkthrough
 
