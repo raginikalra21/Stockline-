@@ -12,6 +12,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import in.stockline.domain.exception.ApiProblem;
 import in.stockline.persistence.repository.Store;
@@ -27,10 +28,16 @@ public class RaceDemo implements DisposableBean {
     private static final int MAX_RETAINED_JOBS = 100;
     private static final List<RaceStrategy> STRATEGIES = List.of(new NaiveDatabaseRaceStrategy(),
         new OptimisticDatabaseRaceStrategy(), new PessimisticDatabaseRaceStrategy());
+    private final RaceSimulationDatabaseFactory databaseFactory;
     private final Semaphore slot = new Semaphore(1);
     private final ExecutorService jobs = Executors.newSingleThreadExecutor();
     private final ConcurrentMap<String, JobState> states = new ConcurrentHashMap<>();
     private final ConcurrentLinkedDeque<String> jobOrder = new ConcurrentLinkedDeque<>();
+
+    public RaceDemo() { this(RaceSimulationDatabase::new); }
+
+    @Autowired
+    public RaceDemo(RaceSimulationDatabaseFactory databaseFactory) { this.databaseFactory = databaseFactory; }
 
     @Override
     public void destroy() {
@@ -140,7 +147,7 @@ public class RaceDemo implements DisposableBean {
     }
 
     private StrategyRun executeStrategy(RaceInput input, JobState state, RaceStrategy strategy) {
-        try (RaceSimulationDatabase database = new RaceSimulationDatabase(input)) {
+        try (RaceSimulationDatabase database = databaseFactory.create(input)) {
             RaceCounters counters = new RaceCounters();
             AtomicInteger accepted = new AtomicInteger();
             AtomicInteger rejected = new AtomicInteger();

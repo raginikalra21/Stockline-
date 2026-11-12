@@ -36,6 +36,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     "spring.profiles.active=test,local-demo",
     "spring.datasource.url=jdbc:h2:mem:stockline-demo-auth;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=4000",
     "stockline.demo.initialize=true",
+    "stockline.demo.admin.username=demo-admin",
+    "stockline.demo.admin.password=StocklineAdmin!2026",
+    "stockline.demo.manager.username=demo-manager",
+    "stockline.demo.manager.password=StocklineManager!2026",
+    "stockline.jwt.secret=VGVzdC1vbmx5LWp3dC1zaWduaW5nLWtleS0zMi1ieXRlcy1taW5pbXVt",
     "stockline.fulfillment-delay=1h"
 })
 @AutoConfigureMockMvc

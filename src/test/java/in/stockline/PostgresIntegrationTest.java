@@ -216,6 +216,28 @@ class PostgresIntegrationTest {
     }
 
     @Test
+    void productionRaceSimulationFactoryUsesAndDropsAnIsolatedPostgresSchema() {
+        JdbcTemplate admin = new JdbcTemplate(new DriverManagerDataSource(
+            POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword()));
+        int schemasBefore = admin.queryForObject("SELECT COUNT(*) FROM information_schema.schemata "
+            + "WHERE schema_name LIKE 'stockline_race_%'", Integer.class);
+        var factory = new in.stockline.simulation.concurrency.PostgresRaceSimulationDatabaseFactory(
+            admin.getDataSource(), POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
+        RaceInput input = new RaceInput(2, 10, 1, 2, 4, 30, "PESSIMISTIC", 1);
+
+        try (RaceSimulationDatabase isolated = factory.create(input)) {
+            assertThat(isolated.store.stockForSku("RACE-01").stream()
+                .mapToLong(stock -> stock.available() + stock.reserved()).sum()).isEqualTo(10);
+            assertThat(new InventoryAuditService(isolated.store).reconcile())
+                .allMatch(line -> "VALID".equals(line.overallIntegrityStatus()));
+        }
+
+        int schemasAfter = admin.queryForObject("SELECT COUNT(*) FROM information_schema.schemata "
+            + "WHERE schema_name LIKE 'stockline_race_%'", Integer.class);
+        assertThat(schemasAfter).isEqualTo(schemasBefore);
+    }
+
+    @Test
     void pessimisticPostgresReservationWaitsOnTheDatabaseRowLock() throws Exception {
         RaceInput input = new RaceInput(2, 2, 1, 2, 2, 30, "PESSIMISTIC", 1);
         String schema = "lock_" + UUID.randomUUID().toString().replace("-", "");

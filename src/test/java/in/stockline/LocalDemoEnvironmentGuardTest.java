@@ -31,4 +31,15 @@ class LocalDemoEnvironmentGuardTest {
             .isInstanceOf(IllegalStateException.class)
             .hasMessageContaining("forbidden in production");
     }
+
+    @Test
+    void productionRejectsDevelopmentAndTestProfiles() {
+        for (String profile : new String[] {"dev", "test", "benchmark"}) {
+            var environment = new org.springframework.mock.env.MockEnvironment();
+            environment.setActiveProfiles("prod", profile);
+            assertThatThrownBy(() -> new LocalDemoEnvironmentGuard().postProcessEnvironment(environment,
+                new org.springframework.boot.SpringApplication(in.stockline.StocklineApplication.class)))
+                .hasMessageContaining("forbidden in production");
+        }
+    }
 }
