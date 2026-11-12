@@ -1,0 +1,1 @@
+window.STOCKLINE_DEMO_ACCOUNTS = [];

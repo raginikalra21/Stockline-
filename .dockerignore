@@ -2,7 +2,14 @@
 .gitignore
 .idea
 .vscode
+.DS_Store
+.env
+.env.*
+!.env.example
 data
 target
+benchmark-results
+docs
+scripts
 *.mv.db
 *.trace.db

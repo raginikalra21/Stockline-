@@ -7,3 +7,23 @@ data/
 .env
 .env.*
 !.env.example
+benchmark-results/
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Local databases
+*.mv.db
+*.trace.db
+/data/
+
+# Build output
+/target/
+*.log
+
+# IDE and OS files
+.DS_Store
+.idea/
+.vscode/

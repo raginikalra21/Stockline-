@@ -1,0 +1,3856 @@
+{
+  "baseUrl": "http://localhost:18082",
+  "browser": "Playwright Chromium",
+  "pages": [
+    "overview",
+    "inventory",
+    "warehouses",
+    "orders",
+    "history",
+    "events",
+    "operations",
+    "race"
+  ],
+  "viewports": [
+    {
+      "width": 320,
+      "height": 700,
+      "login": {
+        "visible": true
+      },
+      "pages": {
+        "overview": {
+          "viewport": {
+            "width": 320,
+            "height": 700
+          },
+          "documentWidth": 320,
+          "bodyWidth": 320,
+          "main": {
+            "x": 0,
+            "y": 364,
+            "right": 320,
+            "bottom": 3276,
+            "width": 320,
+            "height": 2912
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 320,
+            "bottom": 273,
+            "width": 320,
+            "height": 273
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 5
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 3,
+          "tablesReachableAtEnd": 3,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 285,
+            "right": 80,
+            "bottom": 301,
+            "width": 61,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 313,
+            "right": 252,
+            "bottom": 351,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "134px 134px",
+          "pageHeading": "Operations overview",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "inventory": {
+          "viewport": {
+            "width": 320,
+            "height": 700
+          },
+          "documentWidth": 320,
+          "bodyWidth": 320,
+          "main": {
+            "x": 0,
+            "y": 364,
+            "right": 320,
+            "bottom": 3667,
+            "width": 320,
+            "height": 3303
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 320,
+            "bottom": 273,
+            "width": 320,
+            "height": 273
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 5
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 4,
+          "tablesReachableAtEnd": 4,
+          "visibleControls": 22,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 285,
+            "right": 81,
+            "bottom": 301,
+            "width": 62,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 313,
+            "right": 252,
+            "bottom": 351,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "warehouses": {
+          "viewport": {
+            "width": 320,
+            "height": 700
+          },
+          "documentWidth": 320,
+          "bodyWidth": 320,
+          "main": {
+            "x": 0,
+            "y": 364,
+            "right": 320,
+            "bottom": 1351,
+            "width": 320,
+            "height": 987
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 320,
+            "bottom": 273,
+            "width": 320,
+            "height": 273
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 5
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 14,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 285,
+            "right": 69,
+            "bottom": 301,
+            "width": 50,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 313,
+            "right": 252,
+            "bottom": 351,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Catalog",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "orders": {
+          "viewport": {
+            "width": 320,
+            "height": 700
+          },
+          "documentWidth": 320,
+          "bodyWidth": 320,
+          "main": {
+            "x": 0,
+            "y": 364,
+            "right": 320,
+            "bottom": 879,
+            "width": 320,
+            "height": 515
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 320,
+            "bottom": 273,
+            "width": 320,
+            "height": 273
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 5
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 15,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 285,
+            "right": 63,
+            "bottom": 301,
+            "width": 44,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 313,
+            "right": 252,
+            "bottom": 351,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Orders",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "history": {
+          "viewport": {
+            "width": 320,
+            "height": 700
+          },
+          "documentWidth": 320,
+          "bodyWidth": 320,
+          "main": {
+            "x": 0,
+            "y": 364,
+            "right": 320,
+            "bottom": 2251,
+            "width": 320,
+            "height": 1887
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 320,
+            "bottom": 273,
+            "width": 320,
+            "height": 273
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 5
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 19,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 285,
+            "right": 132,
+            "bottom": 301,
+            "width": 113,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 313,
+            "right": 252,
+            "bottom": 351,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory History",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "events": {
+          "viewport": {
+            "width": 320,
+            "height": 700
+          },
+          "documentWidth": 320,
+          "bodyWidth": 320,
+          "main": {
+            "x": 0,
+            "y": 364,
+            "right": 320,
+            "bottom": 1275,
+            "width": 320,
+            "height": 911
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 320,
+            "bottom": 273,
+            "width": 320,
+            "height": 273
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 5
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 285,
+            "right": 82,
+            "bottom": 301,
+            "width": 63,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 313,
+            "right": 252,
+            "bottom": 351,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Event Log",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "operations": {
+          "viewport": {
+            "width": 320,
+            "height": 700
+          },
+          "documentWidth": 320,
+          "bodyWidth": 320,
+          "main": {
+            "x": 0,
+            "y": 364,
+            "right": 320,
+            "bottom": 796,
+            "width": 320,
+            "height": 432
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 320,
+            "bottom": 273,
+            "width": 320,
+            "height": 273
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 5
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 13,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 285,
+            "right": 136,
+            "bottom": 301,
+            "width": 117,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 313,
+            "right": 252,
+            "bottom": 351,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Operations Health",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "race": {
+          "viewport": {
+            "width": 320,
+            "height": 700
+          },
+          "documentWidth": 320,
+          "bodyWidth": 320,
+          "main": {
+            "x": 0,
+            "y": 364,
+            "right": 320,
+            "bottom": 2717,
+            "width": 320,
+            "height": 2353
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 320,
+            "bottom": 273,
+            "width": 320,
+            "height": 273
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 5
+          },
+          "visibleTables": 0,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 25,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 285,
+            "right": 129,
+            "bottom": 301,
+            "width": 110,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 313,
+            "right": 252,
+            "bottom": 351,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Concurrency Lab",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        }
+      },
+      "dialogs": {
+        "orderAllocationPreview": {
+          "open": true,
+          "x": 18,
+          "y": 13,
+          "right": 302,
+          "bottom": 687,
+          "width": 284,
+          "height": 674,
+          "scrollHeight": 807,
+          "clientHeight": 672,
+          "overflowY": "auto",
+          "hasAllocationPreview": true,
+          "fitsViewport": true,
+          "footerAfterScroll": {
+            "scrollTop": 135,
+            "scrollHeight": 807,
+            "clientHeight": 672,
+            "footerButtons": [
+              {
+                "text": "Close",
+                "x": 92,
+                "y": 629,
+                "right": 156,
+                "bottom": 667
+              },
+              {
+                "text": "Reserve stock",
+                "x": 164,
+                "y": 629,
+                "right": 282,
+                "bottom": 667
+              }
+            ],
+            "footerReachable": true
+          }
+        },
+        "allocationPreviewTriggered": true,
+        "product": {
+          "x": 18,
+          "y": 153,
+          "right": 302,
+          "bottom": 547,
+          "width": 284,
+          "height": 395,
+          "fitsViewport": true
+        },
+        "warehouse": {
+          "x": 18,
+          "y": 115,
+          "right": 302,
+          "bottom": 585,
+          "width": 284,
+          "height": 470,
+          "fitsViewport": true
+        }
+      },
+      "concurrencyChartCheck": {
+        "documentWidth": 320,
+        "bodyWidth": 320,
+        "chartCount": 3,
+        "chartRowsFit": true,
+        "charts": [
+          {
+            "left": 39,
+            "right": 281,
+            "width": 242,
+            "rows": [
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              },
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              },
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 39,
+            "right": 281,
+            "width": 242,
+            "rows": [
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              },
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              },
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 39,
+            "right": 281,
+            "width": 242,
+            "rows": [
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              },
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              },
+              {
+                "left": 39,
+                "right": 281,
+                "width": 242
+              }
+            ],
+            "rowsFit": true
+          }
+        ],
+        "metricsTable": {
+          "scrollWidth": 666,
+          "clientWidth": 242,
+          "scrollable": true
+        },
+        "noPageHorizontalOverflow": true,
+        "correctnessBanner": "The naive database transactions exposed lost inventory updates; safe strategies preserved the measured invariants."
+      },
+      "operationsCheck": {
+        "documentWidth": 320,
+        "bodyWidth": 320,
+        "mainWidth": 320,
+        "visibleCards": 0
+      }
+    },
+    {
+      "width": 375,
+      "height": 812,
+      "login": {
+        "visible": true
+      },
+      "pages": {
+        "overview": {
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "documentWidth": 375,
+          "bodyWidth": 375,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 375,
+            "bottom": 3017,
+            "width": 375,
+            "height": 2723
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 375,
+            "bottom": 231,
+            "width": 375,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 3,
+          "tablesReachableAtEnd": 3,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 80,
+            "bottom": 259,
+            "width": 61,
+            "height": 16
+          },
+          "topActions": {
+            "x": 123,
+            "y": 243,
+            "right": 356,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "161.5px 161.5px",
+          "pageHeading": "Operations overview",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "inventory": {
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "documentWidth": 375,
+          "bodyWidth": 375,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 375,
+            "bottom": 3549,
+            "width": 375,
+            "height": 3255
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 375,
+            "bottom": 231,
+            "width": 375,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 4,
+          "tablesReachableAtEnd": 4,
+          "visibleControls": 22,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 81,
+            "bottom": 259,
+            "width": 62,
+            "height": 16
+          },
+          "topActions": {
+            "x": 123,
+            "y": 243,
+            "right": 356,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "warehouses": {
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "documentWidth": 375,
+          "bodyWidth": 375,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 375,
+            "bottom": 1223,
+            "width": 375,
+            "height": 929
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 375,
+            "bottom": 231,
+            "width": 375,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 14,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 69,
+            "bottom": 259,
+            "width": 50,
+            "height": 16
+          },
+          "topActions": {
+            "x": 123,
+            "y": 243,
+            "right": 356,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Catalog",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "orders": {
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "documentWidth": 375,
+          "bodyWidth": 375,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 375,
+            "bottom": 786,
+            "width": 375,
+            "height": 492
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 375,
+            "bottom": 231,
+            "width": 375,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 15,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 63,
+            "bottom": 259,
+            "width": 44,
+            "height": 16
+          },
+          "topActions": {
+            "x": 123,
+            "y": 243,
+            "right": 356,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Orders",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "history": {
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "documentWidth": 375,
+          "bodyWidth": 375,
+          "main": {
+            "x": 0,
+            "y": 322,
+            "right": 375,
+            "bottom": 2132,
+            "width": 375,
+            "height": 1810
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 375,
+            "bottom": 231,
+            "width": 375,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 19,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 132,
+            "bottom": 259,
+            "width": 113,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 271,
+            "right": 252,
+            "bottom": 309,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory History",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "events": {
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "documentWidth": 375,
+          "bodyWidth": 375,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 375,
+            "bottom": 807,
+            "width": 375,
+            "height": 513
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 375,
+            "bottom": 231,
+            "width": 375,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 82,
+            "bottom": 259,
+            "width": 63,
+            "height": 16
+          },
+          "topActions": {
+            "x": 123,
+            "y": 243,
+            "right": 356,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Event Log",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "operations": {
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "documentWidth": 375,
+          "bodyWidth": 375,
+          "main": {
+            "x": 0,
+            "y": 322,
+            "right": 375,
+            "bottom": 722,
+            "width": 375,
+            "height": 400
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 375,
+            "bottom": 231,
+            "width": 375,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 13,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 136,
+            "bottom": 259,
+            "width": 117,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 271,
+            "right": 252,
+            "bottom": 309,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Operations Health",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "race": {
+          "viewport": {
+            "width": 375,
+            "height": 812
+          },
+          "documentWidth": 375,
+          "bodyWidth": 375,
+          "main": {
+            "x": 0,
+            "y": 322,
+            "right": 375,
+            "bottom": 2593,
+            "width": 375,
+            "height": 2271
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 375,
+            "bottom": 231,
+            "width": 375,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 0,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 25,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 129,
+            "bottom": 259,
+            "width": 110,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 271,
+            "right": 252,
+            "bottom": 309,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Concurrency Lab",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        }
+      },
+      "dialogs": {
+        "orderAllocationPreview": {
+          "open": true,
+          "x": 18,
+          "y": 13,
+          "right": 357,
+          "bottom": 799,
+          "width": 339,
+          "height": 786,
+          "scrollHeight": 807,
+          "clientHeight": 784,
+          "overflowY": "auto",
+          "hasAllocationPreview": true,
+          "fitsViewport": true,
+          "footerAfterScroll": {
+            "scrollTop": 23,
+            "scrollHeight": 807,
+            "clientHeight": 784,
+            "footerButtons": [
+              {
+                "text": "Close",
+                "x": 147,
+                "y": 741,
+                "right": 211,
+                "bottom": 779
+              },
+              {
+                "text": "Reserve stock",
+                "x": 219,
+                "y": 741,
+                "right": 337,
+                "bottom": 779
+              }
+            ],
+            "footerReachable": true
+          }
+        },
+        "allocationPreviewTriggered": true,
+        "product": {
+          "x": 18,
+          "y": 209,
+          "right": 357,
+          "bottom": 603,
+          "width": 339,
+          "height": 395,
+          "fitsViewport": true
+        },
+        "warehouse": {
+          "x": 18,
+          "y": 180,
+          "right": 357,
+          "bottom": 632,
+          "width": 339,
+          "height": 452,
+          "fitsViewport": true
+        }
+      },
+      "concurrencyChartCheck": {
+        "documentWidth": 375,
+        "bodyWidth": 375,
+        "chartCount": 3,
+        "chartRowsFit": true,
+        "charts": [
+          {
+            "left": 39,
+            "right": 336,
+            "width": 297,
+            "rows": [
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              },
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              },
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 39,
+            "right": 336,
+            "width": 297,
+            "rows": [
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              },
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              },
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 39,
+            "right": 336,
+            "width": 297,
+            "rows": [
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              },
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              },
+              {
+                "left": 39,
+                "right": 336,
+                "width": 297
+              }
+            ],
+            "rowsFit": true
+          }
+        ],
+        "metricsTable": {
+          "scrollWidth": 666,
+          "clientWidth": 297,
+          "scrollable": true
+        },
+        "noPageHorizontalOverflow": true,
+        "correctnessBanner": "The naive database transactions exposed lost inventory updates; safe strategies preserved the measured invariants."
+      },
+      "operationsCheck": {
+        "documentWidth": 375,
+        "bodyWidth": 375,
+        "mainWidth": 375,
+        "visibleCards": 0
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "login": {
+        "visible": true
+      },
+      "pages": {
+        "overview": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "bodyWidth": 390,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 390,
+            "bottom": 3017,
+            "width": 390,
+            "height": 2723
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 390,
+            "bottom": 231,
+            "width": 390,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 3,
+          "tablesReachableAtEnd": 3,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 80,
+            "bottom": 259,
+            "width": 61,
+            "height": 16
+          },
+          "topActions": {
+            "x": 138,
+            "y": 243,
+            "right": 371,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "169px 169px",
+          "pageHeading": "Operations overview",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "inventory": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "bodyWidth": 390,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 390,
+            "bottom": 3549,
+            "width": 390,
+            "height": 3255
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 390,
+            "bottom": 231,
+            "width": 390,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 4,
+          "tablesReachableAtEnd": 4,
+          "visibleControls": 22,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 81,
+            "bottom": 259,
+            "width": 62,
+            "height": 16
+          },
+          "topActions": {
+            "x": 138,
+            "y": 243,
+            "right": 371,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "warehouses": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "bodyWidth": 390,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 390,
+            "bottom": 1223,
+            "width": 390,
+            "height": 929
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 390,
+            "bottom": 231,
+            "width": 390,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 14,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 69,
+            "bottom": 259,
+            "width": 50,
+            "height": 16
+          },
+          "topActions": {
+            "x": 138,
+            "y": 243,
+            "right": 371,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Catalog",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "orders": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "bodyWidth": 390,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 390,
+            "bottom": 786,
+            "width": 390,
+            "height": 492
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 390,
+            "bottom": 231,
+            "width": 390,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 15,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 63,
+            "bottom": 259,
+            "width": 44,
+            "height": 16
+          },
+          "topActions": {
+            "x": 138,
+            "y": 243,
+            "right": 371,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Orders",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "history": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "bodyWidth": 390,
+          "main": {
+            "x": 0,
+            "y": 322,
+            "right": 390,
+            "bottom": 2132,
+            "width": 390,
+            "height": 1810
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 390,
+            "bottom": 231,
+            "width": 390,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 19,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 132,
+            "bottom": 259,
+            "width": 113,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 271,
+            "right": 252,
+            "bottom": 309,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory History",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "events": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "bodyWidth": 390,
+          "main": {
+            "x": 0,
+            "y": 294,
+            "right": 390,
+            "bottom": 1151,
+            "width": 390,
+            "height": 857
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 390,
+            "bottom": 231,
+            "width": 390,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 82,
+            "bottom": 259,
+            "width": 63,
+            "height": 16
+          },
+          "topActions": {
+            "x": 138,
+            "y": 243,
+            "right": 371,
+            "bottom": 281,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Event Log",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "operations": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "bodyWidth": 390,
+          "main": {
+            "x": 0,
+            "y": 322,
+            "right": 390,
+            "bottom": 731,
+            "width": 390,
+            "height": 409
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 390,
+            "bottom": 231,
+            "width": 390,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 13,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 136,
+            "bottom": 259,
+            "width": 117,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 271,
+            "right": 252,
+            "bottom": 309,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Operations Health",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "race": {
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "documentWidth": 390,
+          "bodyWidth": 390,
+          "main": {
+            "x": 0,
+            "y": 322,
+            "right": 390,
+            "bottom": 2543,
+            "width": 390,
+            "height": 2221
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 390,
+            "bottom": 231,
+            "width": 390,
+            "height": 231
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 4
+          },
+          "visibleTables": 0,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 25,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 243,
+            "right": 129,
+            "bottom": 259,
+            "width": 110,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 271,
+            "right": 252,
+            "bottom": 309,
+            "width": 233,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Concurrency Lab",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        }
+      },
+      "dialogs": {
+        "orderAllocationPreview": {
+          "open": true,
+          "x": 18,
+          "y": 26,
+          "right": 372,
+          "bottom": 818,
+          "width": 354,
+          "height": 792,
+          "scrollHeight": 790,
+          "clientHeight": 790,
+          "overflowY": "auto",
+          "hasAllocationPreview": true,
+          "fitsViewport": true,
+          "footerAfterScroll": {
+            "scrollTop": 0,
+            "scrollHeight": 790,
+            "clientHeight": 790,
+            "footerButtons": [
+              {
+                "text": "Close",
+                "x": 162,
+                "y": 760,
+                "right": 226,
+                "bottom": 798
+              },
+              {
+                "text": "Reserve stock",
+                "x": 234,
+                "y": 760,
+                "right": 352,
+                "bottom": 798
+              }
+            ],
+            "footerReachable": true
+          }
+        },
+        "allocationPreviewTriggered": true,
+        "product": {
+          "x": 18,
+          "y": 225,
+          "right": 372,
+          "bottom": 619,
+          "width": 354,
+          "height": 395,
+          "fitsViewport": true
+        },
+        "warehouse": {
+          "x": 18,
+          "y": 196,
+          "right": 372,
+          "bottom": 648,
+          "width": 354,
+          "height": 452,
+          "fitsViewport": true
+        }
+      },
+      "concurrencyChartCheck": {
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "chartCount": 3,
+        "chartRowsFit": true,
+        "charts": [
+          {
+            "left": 39,
+            "right": 351,
+            "width": 312,
+            "rows": [
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              },
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              },
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 39,
+            "right": 351,
+            "width": 312,
+            "rows": [
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              },
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              },
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 39,
+            "right": 351,
+            "width": 312,
+            "rows": [
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              },
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              },
+              {
+                "left": 39,
+                "right": 351,
+                "width": 312
+              }
+            ],
+            "rowsFit": true
+          }
+        ],
+        "metricsTable": {
+          "scrollWidth": 666,
+          "clientWidth": 312,
+          "scrollable": true
+        },
+        "noPageHorizontalOverflow": true,
+        "correctnessBanner": "The naive database transactions exposed lost inventory updates; safe strategies preserved the measured invariants."
+      },
+      "operationsCheck": {
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "mainWidth": 390,
+        "visibleCards": 0
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "login": {
+        "visible": true
+      },
+      "pages": {
+        "overview": {
+          "viewport": {
+            "width": 430,
+            "height": 932
+          },
+          "documentWidth": 430,
+          "bodyWidth": 430,
+          "main": {
+            "x": 0,
+            "y": 330,
+            "right": 430,
+            "bottom": 2991,
+            "width": 430,
+            "height": 2661
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 430,
+            "bottom": 189,
+            "width": 430,
+            "height": 189
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 3
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 3,
+          "tablesReachableAtEnd": 3,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 201,
+            "right": 175,
+            "bottom": 217,
+            "width": 156,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 229,
+            "right": 411,
+            "bottom": 317,
+            "width": 392,
+            "height": 88
+          },
+          "topbarCollision": false,
+          "statsGrid": "189px 189px",
+          "pageHeading": "Operations overview",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "inventory": {
+          "viewport": {
+            "width": 430,
+            "height": 932
+          },
+          "documentWidth": 430,
+          "bodyWidth": 430,
+          "main": {
+            "x": 0,
+            "y": 330,
+            "right": 430,
+            "bottom": 3496,
+            "width": 430,
+            "height": 3166
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 430,
+            "bottom": 189,
+            "width": 430,
+            "height": 189
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 3
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 4,
+          "tablesReachableAtEnd": 4,
+          "visibleControls": 22,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 201,
+            "right": 176,
+            "bottom": 217,
+            "width": 157,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 229,
+            "right": 411,
+            "bottom": 317,
+            "width": 392,
+            "height": 88
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "warehouses": {
+          "viewport": {
+            "width": 430,
+            "height": 932
+          },
+          "documentWidth": 430,
+          "bodyWidth": 430,
+          "main": {
+            "x": 0,
+            "y": 330,
+            "right": 430,
+            "bottom": 1259,
+            "width": 430,
+            "height": 929
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 430,
+            "bottom": 189,
+            "width": 430,
+            "height": 189
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 3
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 14,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 201,
+            "right": 164,
+            "bottom": 217,
+            "width": 145,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 229,
+            "right": 411,
+            "bottom": 317,
+            "width": 392,
+            "height": 88
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Catalog",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "orders": {
+          "viewport": {
+            "width": 430,
+            "height": 932
+          },
+          "documentWidth": 430,
+          "bodyWidth": 430,
+          "main": {
+            "x": 0,
+            "y": 330,
+            "right": 430,
+            "bottom": 822,
+            "width": 430,
+            "height": 492
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 430,
+            "bottom": 189,
+            "width": 430,
+            "height": 189
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 3
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 15,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 201,
+            "right": 159,
+            "bottom": 217,
+            "width": 140,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 229,
+            "right": 411,
+            "bottom": 317,
+            "width": 392,
+            "height": 88
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Orders",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "history": {
+          "viewport": {
+            "width": 430,
+            "height": 932
+          },
+          "documentWidth": 430,
+          "bodyWidth": 430,
+          "main": {
+            "x": 0,
+            "y": 330,
+            "right": 430,
+            "bottom": 2107,
+            "width": 430,
+            "height": 1777
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 430,
+            "bottom": 189,
+            "width": 430,
+            "height": 189
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 3
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 19,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 201,
+            "right": 227,
+            "bottom": 217,
+            "width": 208,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 229,
+            "right": 411,
+            "bottom": 317,
+            "width": 392,
+            "height": 88
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory History",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "events": {
+          "viewport": {
+            "width": 430,
+            "height": 932
+          },
+          "documentWidth": 430,
+          "bodyWidth": 430,
+          "main": {
+            "x": 0,
+            "y": 330,
+            "right": 430,
+            "bottom": 1187,
+            "width": 430,
+            "height": 857
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 430,
+            "bottom": 189,
+            "width": 430,
+            "height": 189
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 3
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 201,
+            "right": 177,
+            "bottom": 217,
+            "width": 158,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 229,
+            "right": 411,
+            "bottom": 317,
+            "width": 392,
+            "height": 88
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Event Log",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "operations": {
+          "viewport": {
+            "width": 430,
+            "height": 932
+          },
+          "documentWidth": 430,
+          "bodyWidth": 430,
+          "main": {
+            "x": 0,
+            "y": 330,
+            "right": 430,
+            "bottom": 722,
+            "width": 430,
+            "height": 392
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 430,
+            "bottom": 189,
+            "width": 430,
+            "height": 189
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 3
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 13,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 201,
+            "right": 232,
+            "bottom": 217,
+            "width": 213,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 229,
+            "right": 411,
+            "bottom": 317,
+            "width": 392,
+            "height": 88
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Operations Health",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "race": {
+          "viewport": {
+            "width": 430,
+            "height": 932
+          },
+          "documentWidth": 430,
+          "bodyWidth": 430,
+          "main": {
+            "x": 0,
+            "y": 330,
+            "right": 430,
+            "bottom": 2302,
+            "width": 430,
+            "height": 1972
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 430,
+            "bottom": 189,
+            "width": 430,
+            "height": 189
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 3
+          },
+          "visibleTables": 0,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 25,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 19,
+            "y": 201,
+            "right": 225,
+            "bottom": 217,
+            "width": 206,
+            "height": 16
+          },
+          "topActions": {
+            "x": 19,
+            "y": 229,
+            "right": 411,
+            "bottom": 317,
+            "width": 392,
+            "height": 88
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Concurrency Lab",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        }
+      },
+      "dialogs": {
+        "orderAllocationPreview": {
+          "open": true,
+          "x": 18,
+          "y": 78,
+          "right": 412,
+          "bottom": 854,
+          "width": 394,
+          "height": 777,
+          "scrollHeight": 775,
+          "clientHeight": 775,
+          "overflowY": "auto",
+          "hasAllocationPreview": true,
+          "fitsViewport": true,
+          "footerAfterScroll": {
+            "scrollTop": 0,
+            "scrollHeight": 775,
+            "clientHeight": 775,
+            "footerButtons": [
+              {
+                "text": "Close",
+                "x": 202,
+                "y": 796,
+                "right": 266,
+                "bottom": 834
+              },
+              {
+                "text": "Reserve stock",
+                "x": 274,
+                "y": 796,
+                "right": 392,
+                "bottom": 834
+              }
+            ],
+            "footerReachable": true
+          }
+        },
+        "allocationPreviewTriggered": true,
+        "product": {
+          "x": 18,
+          "y": 269,
+          "right": 412,
+          "bottom": 663,
+          "width": 394,
+          "height": 395,
+          "fitsViewport": true
+        },
+        "warehouse": {
+          "x": 18,
+          "y": 240,
+          "right": 412,
+          "bottom": 692,
+          "width": 394,
+          "height": 452,
+          "fitsViewport": true
+        }
+      },
+      "concurrencyChartCheck": {
+        "documentWidth": 430,
+        "bodyWidth": 430,
+        "chartCount": 3,
+        "chartRowsFit": true,
+        "charts": [
+          {
+            "left": 39,
+            "right": 391,
+            "width": 352,
+            "rows": [
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              },
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              },
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 39,
+            "right": 391,
+            "width": 352,
+            "rows": [
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              },
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              },
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 39,
+            "right": 391,
+            "width": 352,
+            "rows": [
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              },
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              },
+              {
+                "left": 39,
+                "right": 391,
+                "width": 352
+              }
+            ],
+            "rowsFit": true
+          }
+        ],
+        "metricsTable": {
+          "scrollWidth": 666,
+          "clientWidth": 352,
+          "scrollable": true
+        },
+        "noPageHorizontalOverflow": true,
+        "correctnessBanner": "The naive database transactions exposed lost inventory updates; safe strategies preserved the measured invariants."
+      },
+      "operationsCheck": {
+        "documentWidth": 430,
+        "bodyWidth": 430,
+        "mainWidth": 430,
+        "visibleCards": 0
+      }
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "login": {
+        "visible": true
+      },
+      "pages": {
+        "overview": {
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "documentWidth": 768,
+          "bodyWidth": 768,
+          "main": {
+            "x": 184,
+            "y": 91,
+            "right": 768,
+            "bottom": 2719,
+            "width": 584,
+            "height": 2628
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 184,
+            "bottom": 1024,
+            "width": 184,
+            "height": 1024
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 2,
+          "tablesReachableAtEnd": 2,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 209,
+            "y": 12,
+            "right": 365,
+            "bottom": 28,
+            "width": 156,
+            "height": 16
+          },
+          "topActions": {
+            "x": 209,
+            "y": 40,
+            "right": 684,
+            "bottom": 78,
+            "width": 474,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "259.656px 259.656px",
+          "pageHeading": "Operations overview",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "inventory": {
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "documentWidth": 768,
+          "bodyWidth": 768,
+          "main": {
+            "x": 184,
+            "y": 91,
+            "right": 768,
+            "bottom": 3147,
+            "width": 584,
+            "height": 3056
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 184,
+            "bottom": 1024,
+            "width": 184,
+            "height": 1024
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 4,
+          "tablesReachableAtEnd": 4,
+          "visibleControls": 22,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 209,
+            "y": 12,
+            "right": 366,
+            "bottom": 28,
+            "width": 157,
+            "height": 16
+          },
+          "topActions": {
+            "x": 209,
+            "y": 40,
+            "right": 684,
+            "bottom": 78,
+            "width": 474,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "warehouses": {
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "documentWidth": 768,
+          "bodyWidth": 768,
+          "main": {
+            "x": 184,
+            "y": 91,
+            "right": 768,
+            "bottom": 1008,
+            "width": 584,
+            "height": 917
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 184,
+            "bottom": 1024,
+            "width": 184,
+            "height": 1024
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 14,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 209,
+            "y": 12,
+            "right": 355,
+            "bottom": 28,
+            "width": 145,
+            "height": 16
+          },
+          "topActions": {
+            "x": 209,
+            "y": 40,
+            "right": 684,
+            "bottom": 78,
+            "width": 474,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Catalog",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "orders": {
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "documentWidth": 768,
+          "bodyWidth": 768,
+          "main": {
+            "x": 184,
+            "y": 91,
+            "right": 768,
+            "bottom": 982,
+            "width": 584,
+            "height": 891
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 184,
+            "bottom": 1024,
+            "width": 184,
+            "height": 1024
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 15,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 209,
+            "y": 12,
+            "right": 349,
+            "bottom": 28,
+            "width": 140,
+            "height": 16
+          },
+          "topActions": {
+            "x": 209,
+            "y": 40,
+            "right": 684,
+            "bottom": 78,
+            "width": 474,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Orders",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "history": {
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "documentWidth": 768,
+          "bodyWidth": 768,
+          "main": {
+            "x": 184,
+            "y": 91,
+            "right": 768,
+            "bottom": 1698,
+            "width": 584,
+            "height": 1607
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 184,
+            "bottom": 1024,
+            "width": 184,
+            "height": 1024
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 19,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 209,
+            "y": 12,
+            "right": 417,
+            "bottom": 28,
+            "width": 208,
+            "height": 16
+          },
+          "topActions": {
+            "x": 209,
+            "y": 40,
+            "right": 684,
+            "bottom": 78,
+            "width": 474,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Inventory History",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "events": {
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "documentWidth": 768,
+          "bodyWidth": 768,
+          "main": {
+            "x": 184,
+            "y": 91,
+            "right": 768,
+            "bottom": 982,
+            "width": 584,
+            "height": 891
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 184,
+            "bottom": 1024,
+            "width": 184,
+            "height": 1024
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 209,
+            "y": 12,
+            "right": 368,
+            "bottom": 28,
+            "width": 158,
+            "height": 16
+          },
+          "topActions": {
+            "x": 209,
+            "y": 40,
+            "right": 684,
+            "bottom": 78,
+            "width": 474,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Event Log",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "operations": {
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "documentWidth": 768,
+          "bodyWidth": 768,
+          "main": {
+            "x": 184,
+            "y": 91,
+            "right": 768,
+            "bottom": 982,
+            "width": 584,
+            "height": 891
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 184,
+            "bottom": 1024,
+            "width": 184,
+            "height": 1024
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 13,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 209,
+            "y": 12,
+            "right": 422,
+            "bottom": 28,
+            "width": 213,
+            "height": 16
+          },
+          "topActions": {
+            "x": 209,
+            "y": 40,
+            "right": 684,
+            "bottom": 78,
+            "width": 474,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Operations Health",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "race": {
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          },
+          "documentWidth": 768,
+          "bodyWidth": 768,
+          "main": {
+            "x": 184,
+            "y": 91,
+            "right": 768,
+            "bottom": 1396,
+            "width": 584,
+            "height": 1305
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 184,
+            "bottom": 1024,
+            "width": 184,
+            "height": 1024
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 0,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 25,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 209,
+            "y": 12,
+            "right": 415,
+            "bottom": 28,
+            "width": 206,
+            "height": 16
+          },
+          "topActions": {
+            "x": 209,
+            "y": 40,
+            "right": 684,
+            "bottom": 78,
+            "width": 474,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(2, minmax(0px, 1fr))",
+          "pageHeading": "Concurrency Lab",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        }
+      },
+      "dialogs": {
+        "orderAllocationPreview": {
+          "open": true,
+          "x": 104,
+          "y": 124,
+          "right": 664,
+          "bottom": 900,
+          "width": 560,
+          "height": 777,
+          "scrollHeight": 775,
+          "clientHeight": 775,
+          "overflowY": "auto",
+          "hasAllocationPreview": true,
+          "fitsViewport": true,
+          "footerAfterScroll": {
+            "scrollTop": 0,
+            "scrollHeight": 775,
+            "clientHeight": 775,
+            "footerButtons": [
+              {
+                "text": "Close",
+                "x": 454,
+                "y": 842,
+                "right": 518,
+                "bottom": 880
+              },
+              {
+                "text": "Reserve stock",
+                "x": 526,
+                "y": 842,
+                "right": 644,
+                "bottom": 880
+              }
+            ],
+            "footerReachable": true
+          }
+        },
+        "allocationPreviewTriggered": true,
+        "product": {
+          "x": 104,
+          "y": 323,
+          "right": 664,
+          "bottom": 701,
+          "width": 560,
+          "height": 377,
+          "fitsViewport": true
+        },
+        "warehouse": {
+          "x": 104,
+          "y": 286,
+          "right": 664,
+          "bottom": 738,
+          "width": 560,
+          "height": 452,
+          "fitsViewport": true
+        }
+      },
+      "concurrencyChartCheck": {
+        "documentWidth": 768,
+        "bodyWidth": 768,
+        "chartCount": 3,
+        "chartRowsFit": true,
+        "charts": [
+          {
+            "left": 491,
+            "right": 723,
+            "width": 231,
+            "rows": [
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              },
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              },
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 491,
+            "right": 723,
+            "width": 231,
+            "rows": [
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              },
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              },
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 491,
+            "right": 723,
+            "width": 231,
+            "rows": [
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              },
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              },
+              {
+                "left": 491,
+                "right": 723,
+                "width": 231
+              }
+            ],
+            "rowsFit": true
+          }
+        ],
+        "metricsTable": {
+          "scrollWidth": 666,
+          "clientWidth": 231,
+          "scrollable": true
+        },
+        "noPageHorizontalOverflow": true,
+        "correctnessBanner": "The naive database transactions exposed lost inventory updates; safe strategies preserved the measured invariants."
+      },
+      "operationsCheck": {
+        "documentWidth": 768,
+        "bodyWidth": 768,
+        "mainWidth": 584,
+        "visibleCards": 0
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "login": {
+        "visible": true
+      },
+      "pages": {
+        "overview": {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "documentWidth": 1366,
+          "bodyWidth": 1366,
+          "main": {
+            "x": 222,
+            "y": 68,
+            "right": 1366,
+            "bottom": 1815,
+            "width": 1144,
+            "height": 1747
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 222,
+            "bottom": 768,
+            "width": 222,
+            "height": 768
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 267,
+            "y": 26,
+            "right": 423,
+            "bottom": 42,
+            "width": 156,
+            "height": 16
+          },
+          "topActions": {
+            "x": 832,
+            "y": 15,
+            "right": 1321,
+            "bottom": 53,
+            "width": 489,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "252.969px 252.969px 252.969px 252.969px",
+          "pageHeading": "Operations overview",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "inventory": {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "documentWidth": 1366,
+          "bodyWidth": 1366,
+          "main": {
+            "x": 222,
+            "y": 68,
+            "right": 1366,
+            "bottom": 2924,
+            "width": 1144,
+            "height": 2856
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 222,
+            "bottom": 768,
+            "width": 222,
+            "height": 768
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 4,
+          "horizontallyScrollableTables": 2,
+          "tablesReachableAtEnd": 2,
+          "visibleControls": 22,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 267,
+            "y": 26,
+            "right": 424,
+            "bottom": 42,
+            "width": 157,
+            "height": 16
+          },
+          "topActions": {
+            "x": 832,
+            "y": 15,
+            "right": 1321,
+            "bottom": 53,
+            "width": 489,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(4, minmax(0px, 1fr))",
+          "pageHeading": "Inventory",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "warehouses": {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "documentWidth": 1366,
+          "bodyWidth": 1366,
+          "main": {
+            "x": 222,
+            "y": 68,
+            "right": 1366,
+            "bottom": 726,
+            "width": 1144,
+            "height": 658
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 222,
+            "bottom": 768,
+            "width": 222,
+            "height": 768
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 14,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 267,
+            "y": 26,
+            "right": 412,
+            "bottom": 42,
+            "width": 145,
+            "height": 16
+          },
+          "topActions": {
+            "x": 832,
+            "y": 15,
+            "right": 1321,
+            "bottom": 53,
+            "width": 489,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(4, minmax(0px, 1fr))",
+          "pageHeading": "Catalog",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "orders": {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "documentWidth": 1366,
+          "bodyWidth": 1366,
+          "main": {
+            "x": 222,
+            "y": 68,
+            "right": 1366,
+            "bottom": 726,
+            "width": 1144,
+            "height": 658
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 222,
+            "bottom": 768,
+            "width": 222,
+            "height": 768
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 15,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 267,
+            "y": 26,
+            "right": 407,
+            "bottom": 42,
+            "width": 140,
+            "height": 16
+          },
+          "topActions": {
+            "x": 832,
+            "y": 15,
+            "right": 1321,
+            "bottom": 53,
+            "width": 489,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(4, minmax(0px, 1fr))",
+          "pageHeading": "Orders",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "history": {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "documentWidth": 1366,
+          "bodyWidth": 1366,
+          "main": {
+            "x": 222,
+            "y": 68,
+            "right": 1366,
+            "bottom": 1600,
+            "width": 1144,
+            "height": 1532
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 222,
+            "bottom": 768,
+            "width": 222,
+            "height": 768
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 2,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 19,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 267,
+            "y": 26,
+            "right": 475,
+            "bottom": 42,
+            "width": 208,
+            "height": 16
+          },
+          "topActions": {
+            "x": 832,
+            "y": 15,
+            "right": 1321,
+            "bottom": 53,
+            "width": 489,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(4, minmax(0px, 1fr))",
+          "pageHeading": "Inventory History",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "events": {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "documentWidth": 1366,
+          "bodyWidth": 1366,
+          "main": {
+            "x": 222,
+            "y": 68,
+            "right": 1366,
+            "bottom": 781,
+            "width": 1144,
+            "height": 713
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 222,
+            "bottom": 768,
+            "width": 222,
+            "height": 768
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 1,
+          "tablesReachableAtEnd": 1,
+          "visibleControls": 18,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 267,
+            "y": 26,
+            "right": 426,
+            "bottom": 42,
+            "width": 158,
+            "height": 16
+          },
+          "topActions": {
+            "x": 832,
+            "y": 15,
+            "right": 1321,
+            "bottom": 53,
+            "width": 489,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(4, minmax(0px, 1fr))",
+          "pageHeading": "Event Log",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "operations": {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "documentWidth": 1366,
+          "bodyWidth": 1366,
+          "main": {
+            "x": 222,
+            "y": 68,
+            "right": 1366,
+            "bottom": 726,
+            "width": 1144,
+            "height": 658
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 222,
+            "bottom": 768,
+            "width": 222,
+            "height": 768
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 1,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 13,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 267,
+            "y": 26,
+            "right": 480,
+            "bottom": 42,
+            "width": 213,
+            "height": 16
+          },
+          "topActions": {
+            "x": 832,
+            "y": 15,
+            "right": 1321,
+            "bottom": 53,
+            "width": 489,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(4, minmax(0px, 1fr))",
+          "pageHeading": "Operations Health",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        },
+        "race": {
+          "viewport": {
+            "width": 1366,
+            "height": 768
+          },
+          "documentWidth": 1366,
+          "bodyWidth": 1366,
+          "main": {
+            "x": 222,
+            "y": 68,
+            "right": 1366,
+            "bottom": 1297,
+            "width": 1144,
+            "height": 1229
+          },
+          "sidebar": {
+            "x": 0,
+            "y": 0,
+            "right": 222,
+            "bottom": 768,
+            "width": 222,
+            "height": 768
+          },
+          "nav": {
+            "visible": true,
+            "links": 8,
+            "offscreenLinks": 0,
+            "wrappedRows": 8
+          },
+          "visibleTables": 0,
+          "horizontallyScrollableTables": 0,
+          "tablesReachableAtEnd": 0,
+          "visibleControls": 25,
+          "offscreenControls": [],
+          "breadcrumb": {
+            "x": 267,
+            "y": 26,
+            "right": 473,
+            "bottom": 42,
+            "width": 206,
+            "height": 16
+          },
+          "topActions": {
+            "x": 832,
+            "y": 15,
+            "right": 1321,
+            "bottom": 53,
+            "width": 489,
+            "height": 38
+          },
+          "topbarCollision": false,
+          "statsGrid": "repeat(4, minmax(0px, 1fr))",
+          "pageHeading": "Concurrency Lab",
+          "noPageHorizontalOverflow": true,
+          "navigationUsable": true,
+          "controlsWithinViewport": true,
+          "tablesRemainUsable": true
+        }
+      },
+      "dialogs": {
+        "orderAllocationPreview": {
+          "open": true,
+          "x": 403,
+          "y": 13,
+          "right": 963,
+          "bottom": 755,
+          "width": 560,
+          "height": 742,
+          "scrollHeight": 775,
+          "clientHeight": 740,
+          "overflowY": "auto",
+          "hasAllocationPreview": true,
+          "fitsViewport": true,
+          "footerAfterScroll": {
+            "scrollTop": 35,
+            "scrollHeight": 775,
+            "clientHeight": 740,
+            "footerButtons": [
+              {
+                "text": "Close",
+                "x": 753,
+                "y": 697,
+                "right": 817,
+                "bottom": 735
+              },
+              {
+                "text": "Reserve stock",
+                "x": 825,
+                "y": 697,
+                "right": 943,
+                "bottom": 735
+              }
+            ],
+            "footerReachable": true
+          }
+        },
+        "allocationPreviewTriggered": true,
+        "product": {
+          "x": 403,
+          "y": 195,
+          "right": 963,
+          "bottom": 573,
+          "width": 560,
+          "height": 377,
+          "fitsViewport": true
+        },
+        "warehouse": {
+          "x": 403,
+          "y": 158,
+          "right": 963,
+          "bottom": 610,
+          "width": 560,
+          "height": 452,
+          "fitsViewport": true
+        }
+      },
+      "concurrencyChartCheck": {
+        "documentWidth": 1366,
+        "bodyWidth": 1366,
+        "chartCount": 3,
+        "chartRowsFit": true,
+        "charts": [
+          {
+            "left": 687,
+            "right": 1301,
+            "width": 614,
+            "rows": [
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              },
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              },
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 687,
+            "right": 1301,
+            "width": 614,
+            "rows": [
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              },
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              },
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              }
+            ],
+            "rowsFit": true
+          },
+          {
+            "left": 687,
+            "right": 1301,
+            "width": 614,
+            "rows": [
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              },
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              },
+              {
+                "left": 687,
+                "right": 1301,
+                "width": 614
+              }
+            ],
+            "rowsFit": true
+          }
+        ],
+        "metricsTable": {
+          "scrollWidth": 666,
+          "clientWidth": 614,
+          "scrollable": true
+        },
+        "noPageHorizontalOverflow": true,
+        "correctnessBanner": "The naive database transactions exposed lost inventory updates; safe strategies preserved the measured invariants."
+      },
+      "operationsCheck": {
+        "documentWidth": 1366,
+        "bodyWidth": 1366,
+        "mainWidth": 1144,
+        "visibleCards": 0
+      }
+    }
+  ],
+  "allocationPreviewReadOnlyCheck": [
+    {
+      "size": "320x700",
+      "pageWidth": 320,
+      "modalWidth": 284,
+      "modalScrollWidth": 282,
+      "modalClientWidth": 282,
+      "modalHeight": 674,
+      "modalBottom": 687,
+      "allocationTableScrollable": true,
+      "tableScrollWidth": 1362,
+      "tableClientWidth": 216,
+      "tableScrollAtEnd": 1146,
+      "lastColumnVisible": true,
+      "previewSummary": "Complete plan \u00b7 NEAREST WAREHOUSE \u00b7 1 warehouse(s) \u00b7 estimated cost 0",
+      "footerReachableAfterScroll": true,
+      "noModalHorizontalOverflow": true,
+      "noPageHorizontalOverflow": true
+    },
+    {
+      "size": "375x812",
+      "pageWidth": 375,
+      "modalWidth": 339,
+      "modalScrollWidth": 337,
+      "modalClientWidth": 337,
+      "modalHeight": 786,
+      "modalBottom": 799,
+      "allocationTableScrollable": true,
+      "tableScrollWidth": 1362,
+      "tableClientWidth": 271,
+      "tableScrollAtEnd": 1091,
+      "lastColumnVisible": true,
+      "previewSummary": "Complete plan \u00b7 NEAREST WAREHOUSE \u00b7 1 warehouse(s) \u00b7 estimated cost 0",
+      "footerReachableAfterScroll": true,
+      "noModalHorizontalOverflow": true,
+      "noPageHorizontalOverflow": true
+    },
+    {
+      "size": "390x844",
+      "pageWidth": 390,
+      "modalWidth": 354,
+      "modalScrollWidth": 352,
+      "modalClientWidth": 352,
+      "modalHeight": 818,
+      "modalBottom": 831,
+      "allocationTableScrollable": true,
+      "tableScrollWidth": 1362,
+      "tableClientWidth": 286,
+      "tableScrollAtEnd": 1076,
+      "lastColumnVisible": true,
+      "previewSummary": "Complete plan \u00b7 NEAREST WAREHOUSE \u00b7 1 warehouse(s) \u00b7 estimated cost 0",
+      "footerReachableAfterScroll": true,
+      "noModalHorizontalOverflow": true,
+      "noPageHorizontalOverflow": true
+    },
+    {
+      "size": "430x932",
+      "pageWidth": 430,
+      "modalWidth": 394,
+      "modalScrollWidth": 392,
+      "modalClientWidth": 392,
+      "modalHeight": 906,
+      "modalBottom": 919,
+      "allocationTableScrollable": true,
+      "tableScrollWidth": 1362,
+      "tableClientWidth": 326,
+      "tableScrollAtEnd": 1036,
+      "lastColumnVisible": true,
+      "previewSummary": "Complete plan \u00b7 NEAREST WAREHOUSE \u00b7 1 warehouse(s) \u00b7 estimated cost 0",
+      "footerReachableAfterScroll": true,
+      "noModalHorizontalOverflow": true,
+      "noPageHorizontalOverflow": true
+    },
+    {
+      "size": "768x1024",
+      "pageWidth": 768,
+      "modalWidth": 560,
+      "modalScrollWidth": 558,
+      "modalClientWidth": 558,
+      "modalHeight": 909.78125,
+      "modalBottom": 966.890625,
+      "allocationTableScrollable": true,
+      "tableScrollWidth": 1362,
+      "tableClientWidth": 492,
+      "tableScrollAtEnd": 870,
+      "lastColumnVisible": true,
+      "previewSummary": "Complete plan \u00b7 NEAREST WAREHOUSE \u00b7 1 warehouse(s) \u00b7 estimated cost 0",
+      "footerReachableAfterScroll": true,
+      "noModalHorizontalOverflow": true,
+      "noPageHorizontalOverflow": true
+    },
+    {
+      "size": "1366x768",
+      "pageWidth": 1366,
+      "modalWidth": 560,
+      "modalScrollWidth": 558,
+      "modalClientWidth": 558,
+      "modalHeight": 742,
+      "modalBottom": 755,
+      "allocationTableScrollable": true,
+      "tableScrollWidth": 1362,
+      "tableClientWidth": 492,
+      "tableScrollAtEnd": 870,
+      "lastColumnVisible": true,
+      "previewSummary": "Complete plan \u00b7 NEAREST WAREHOUSE \u00b7 1 warehouse(s) \u00b7 estimated cost 0",
+      "footerReachableAfterScroll": true,
+      "noModalHorizontalOverflow": true,
+      "noPageHorizontalOverflow": true
+    }
+  ],
+  "verifiedJarSmoke": {
+    "viewports": [
+      "320x700",
+      "1366x768"
+    ],
+    "allocationPreview": "Complete plan at both widths; dialog scroll width stayed within client width and result table remained an internal scroller.",
+    "concurrencyLab": "320x700 rendered three charts from a 10-buyer isolated H2 comparison.",
+    "readiness": "UP",
+    "postgresql": "PostgreSQL 16.15; Flyway V8 successful."
+  }
+}

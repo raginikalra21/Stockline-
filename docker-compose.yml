@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME:-stockline}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env before starting}
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
     volumes:
       - stockline-postgres:/var/lib/postgresql/data
     healthcheck:
@@ -23,17 +23,26 @@ services:
       database:
         condition: service_healthy
     environment:
-      SPRING_PROFILES_ACTIVE: postgres
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-postgres}
       DB_URL: jdbc:postgresql://database:5432/stockline
       DB_USERNAME: ${DB_USERNAME:-stockline}
       DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env before starting}
       DB_POOL_MAX: ${DB_POOL_MAX:-24}
       DB_POOL_MIN_IDLE: ${DB_POOL_MIN_IDLE:-4}
       DB_CONNECTION_TIMEOUT_MS: ${DB_CONNECTION_TIMEOUT_MS:-30000}
+      DB_VALIDATION_TIMEOUT_MS: ${DB_VALIDATION_TIMEOUT_MS:-5000}
+      DB_IDLE_TIMEOUT_MS: ${DB_IDLE_TIMEOUT_MS:-600000}
+      DB_MAX_LIFETIME_MS: ${DB_MAX_LIFETIME_MS:-1800000}
+      SERVER_TOMCAT_MAX_THREADS: ${SERVER_TOMCAT_MAX_THREADS:-200}
+      SERVER_TOMCAT_MIN_SPARE_THREADS: ${SERVER_TOMCAT_MIN_SPARE_THREADS:-10}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env before starting}
+      STOCKLINE_ADMIN_USERNAME: ${STOCKLINE_ADMIN_USERNAME:?Set STOCKLINE_ADMIN_USERNAME in .env before starting}
+      STOCKLINE_ADMIN_PASSWORD: ${STOCKLINE_ADMIN_PASSWORD:?Set STOCKLINE_ADMIN_PASSWORD in .env before starting}
+      STOCKLINE_SECURE_COOKIE: ${STOCKLINE_SECURE_COOKIE:-false}
     ports:
-      - "8080:8080"
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
     healthcheck:
-      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/actuator/health/readiness"]
       interval: 30s
       timeout: 5s
       retries: 3

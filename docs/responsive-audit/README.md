@@ -1,0 +1,14 @@
+# Responsive Browser Evidence
+
+Playwright Chromium captures and geometry results from the six viewport sizes requested in the release audit. The route-by-route measurements are in [results.json](results.json).
+
+| Viewport | Login | Dashboard | Inventory | Order dialog | Allocation preview | Operations | Concurrency Lab | Simulation result |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 320 × 700 | [PNG](screenshots/login-320x700.png) | [PNG](screenshots/dashboard-320x700.png) | [PNG](screenshots/inventory-320x700.png) | [PNG](screenshots/order-dialog-320x700.png) | [PNG](screenshots/allocation-preview-320x700.png) | [PNG](screenshots/operations-320x700.png) | [PNG](screenshots/concurrency-lab-320x700.png) | [PNG](screenshots/final-concurrency-320x700.png) |
+| 375 × 812 | [PNG](screenshots/login-375x812.png) | [PNG](screenshots/dashboard-375x812.png) | [PNG](screenshots/inventory-375x812.png) | [PNG](screenshots/order-dialog-375x812.png) | [PNG](screenshots/allocation-preview-375x812.png) | [PNG](screenshots/operations-375x812.png) | [PNG](screenshots/concurrency-lab-375x812.png) | [PNG](screenshots/concurrency-result-375x812.png) |
+| 390 × 844 | [PNG](screenshots/login-390x844.png) | [PNG](screenshots/dashboard-390x844.png) | [PNG](screenshots/inventory-390x844.png) | [PNG](screenshots/order-dialog-390x844.png) | [PNG](screenshots/allocation-preview-390x844.png) | [PNG](screenshots/operations-390x844.png) | [PNG](screenshots/concurrency-lab-390x844.png) | [PNG](screenshots/concurrency-result-390x844.png) |
+| 430 × 932 | [PNG](screenshots/login-430x932.png) | [PNG](screenshots/dashboard-430x932.png) | [PNG](screenshots/inventory-430x932.png) | [PNG](screenshots/order-dialog-430x932.png) | [PNG](screenshots/allocation-preview-430x932.png) | [PNG](screenshots/operations-430x932.png) | [PNG](screenshots/concurrency-lab-430x932.png) | [PNG](screenshots/concurrency-result-430x932.png) |
+| 768 × 1024 | [PNG](screenshots/login-768x1024.png) | [PNG](screenshots/dashboard-768x1024.png) | [PNG](screenshots/inventory-768x1024.png) | [PNG](screenshots/order-dialog-768x1024.png) | [PNG](screenshots/allocation-preview-768x1024.png) | [PNG](screenshots/operations-768x1024.png) | [PNG](screenshots/concurrency-lab-768x1024.png) | [PNG](screenshots/concurrency-result-768x1024.png) |
+| 1366 × 768 | [PNG](screenshots/login-1366x768.png) | [PNG](screenshots/dashboard-1366x768.png) | [PNG](screenshots/inventory-1366x768.png) | [PNG](screenshots/order-dialog-1366x768.png) | [PNG](screenshots/allocation-preview-1366x768.png) | [PNG](screenshots/operations-1366x768.png) | [PNG](screenshots/concurrency-lab-1366x768.png) | [PNG](screenshots/concurrency-result-1366x768.png) |
+
+Screenshots are Chromium captures of the local PostgreSQL-backed app. The simulation result images use isolated H2 data and do not touch the PostgreSQL inventory.

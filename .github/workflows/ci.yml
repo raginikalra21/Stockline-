@@ -1,0 +1,49 @@
+name: Stockline CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Java, H2, and PostgreSQL integration tests
+        env:
+          JWT_SECRET: VGVzdC1vbmx5LWp3dC1zaWduaW5nLWtleS0zMi1ieXRlcy1taW5pbXVt
+          STOCKLINE_ADMIN_USERNAME: ci-admin
+          STOCKLINE_ADMIN_PASSWORD: ci-admin-password-123
+        run: |
+          mvn --batch-mode clean verify
+          python3 scripts/check-postgres-tests.py
+      - name: Check browser JavaScript
+        run: node --check src/main/resources/static/app.js && node --check scripts/benchmark.mjs
+      - name: Validate Compose configuration
+        env:
+          DB_PASSWORD: ci-database-password
+          JWT_SECRET: VGVzdC1vbmx5LWp3dC1zaWduaW5nLWtleS0zMi1ieXRlcy1taW5pbXVt
+          STOCKLINE_ADMIN_USERNAME: ci-admin
+          STOCKLINE_ADMIN_PASSWORD: ci-admin-password-123
+        run: docker compose config --quiet
+      - name: Upload test and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stockline-test-reports
+          path: |
+            target/surefire-reports/**
+            target/site/jacoco/**
+          if-no-files-found: warn

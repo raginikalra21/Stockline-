@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#12231c">
+    <meta name="theme-color" content="#0b1e1e">
     <meta name="description" content="Stockline warehouse inventory and fulfillment console">
     <title>Stockline · Operations Console</title>
     <link rel="icon" href="/mark.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css">
-    <script defer src="/app.js"></script>
+    <link rel="stylesheet" href="/styles.css?v=20261112-3">
+    <script defer src="/demo-accounts.js?v=20261112-2"></script>
+    <script defer src="/app.js?v=20261112-2"></script>
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" class="symbols" aria-hidden="true">
@@ -19,6 +20,7 @@
     <symbol id="i-warehouse" viewBox="0 0 24 24"><path d="M3 10 12 4l9 6v10H3zM8 20v-7h8v7m-8-3h8"/></symbol>
     <symbol id="i-race" viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 10-12h-7l1-8Z"/></symbol>
     <symbol id="i-events" viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7-7.5a4 4 0 0 1 0 7.8M20 21v-2a4 4 0 0 0-3-3.87"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol>
@@ -28,54 +30,92 @@
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></symbol>
 </svg>
 <a class="skip" href="#main">Skip to content</a>
-<div class="shell">
+<section id="login-screen" class="login-screen" aria-labelledby="login-title">
+    <form id="login-form" class="login-card">
+        <div class="brand-icon"><svg><use href="#i-brand"/></svg></div>
+        <p class="eyebrow">Stockline Operations</p><h1 id="login-title">Sign in</h1>
+        <p>Use your Stockline account to open the inventory workspace.</p>
+        <label>Username<input name="username" autocomplete="username" required></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+        <button class="button primary" type="submit">Sign in</button>
+        <p id="login-error" class="form-error" role="alert" hidden></p>
+    </form>
+    <section id="demo-accounts" class="demo-accounts" aria-labelledby="demo-accounts-title" hidden>
+        <div class="demo-accounts-heading"><p class="eyebrow">Local academic demonstration</p>
+            <h2 id="demo-accounts-title">Demo Accounts</h2>
+            <p>Demo credentials are intended for local academic demonstration only.</p></div>
+        <article class="demo-account" data-demo-card="admin">
+            <h3>Admin</h3>
+            <dl><div><dt>Username</dt><dd data-demo-username></dd></div><div><dt>Password</dt><dd data-demo-password></dd></div></dl>
+            <button class="button secondary" type="button" data-use-demo="admin">Use Admin Demo</button>
+        </article>
+        <article class="demo-account" data-demo-card="manager">
+            <h3>Warehouse Manager</h3>
+            <dl><div><dt>Username</dt><dd data-demo-username></dd></div><div><dt>Password</dt><dd data-demo-password></dd></div></dl>
+            <button class="button secondary" type="button" data-use-demo="manager">Use Manager Demo</button>
+        </article>
+    </section>
+</section>
+<div class="shell" id="app-shell" hidden>
     <aside class="sidebar">
         <a class="brand" href="#overview" aria-label="Stockline overview">
             <span class="brand-icon"><svg><use href="#i-brand"/></svg></span>
             <span>Stockline<small>Operations Console</small></span>
         </a>
         <nav aria-label="Main navigation">
-            <p class="nav-label">Workspace</p>
-            <a href="#overview"><svg><use href="#i-overview"/></svg>Overview</a>
+            <a href="#overview"><svg><use href="#i-overview"/></svg>Dashboard</a>
             <a href="#inventory"><svg><use href="#i-inventory"/></svg>Inventory</a>
-            <a href="#history"><svg><use href="#i-events"/></svg>Inventory History</a>
+            <a href="#warehouses"><svg><use href="#i-warehouse"/></svg>Warehouses</a>
             <a href="#orders"><svg><use href="#i-orders"/></svg>Orders</a>
-            <a href="#warehouses"><svg><use href="#i-warehouse"/></svg>Catalog</a>
-            <p class="nav-label lab-label">System tools</p>
-            <a href="#race"><svg><use href="#i-race"/></svg>Concurrency Lab</a>
-            <a href="#events"><svg><use href="#i-events"/></svg>Event Log</a>
         </nav>
+        <details class="secondary-nav">
+            <summary>Settings &amp; tools</summary>
+            <nav aria-label="Secondary navigation">
+                <a href="#users" data-admin-only><svg><use href="#i-users"/></svg>User management</a>
+                <a href="#history"><svg><use href="#i-events"/></svg>Inventory history</a>
+                <a href="#race" data-admin-only><svg><use href="#i-race"/></svg>Concurrency lab</a>
+                <a href="#events" data-admin-only><svg><use href="#i-events"/></svg>Event log</a>
+                <a href="#operations" data-admin-only><svg><use href="#i-events"/></svg>Operations health</a>
+            </nav>
+        </details>
         <div class="sidebar-foot"><span class="status-dot"></span><span>Local workspace<small>Inventory &amp; fulfillment</small></span></div>
     </aside>
     <div class="workspace">
         <header class="topbar">
             <div class="breadcrumb"><span>Workspace</span><span class="slash">/</span><strong id="crumb">Overview</strong></div>
             <div class="top-actions"><span id="connection" class="connection"><span class="status-dot"></span><span>Connecting</span></span>
-                <button type="button" class="button primary" data-dialog="order"><svg><use href="#i-plus"/></svg>New order</button>
+                <span id="user-profile" class="user-profile"></span><button id="logout" class="button secondary" type="button">Sign out</button>
+                <button type="button" class="button primary" data-dialog="order" aria-label="Create new order"><svg><use href="#i-plus"/></svg><span id="new-order-label">New order</span></button>
             </div>
         </header>
         <main id="main">
             <div id="notice" class="notice" role="status" hidden></div>
             <section data-view="overview">
                 <div class="page-heading">
-                    <p class="eyebrow">Network summary</p>
-                    <h1>Operations overview</h1>
-                    <p>Track inventory, active reservations, and fulfillment across your warehouse network.</p>
+                    <p class="eyebrow">Stock at a glance</p>
+                    <h1>Dashboard</h1>
+                    <p>Products, available units, and orders within your warehouse access.</p>
                 </div>
-                <div id="stats" class="stats" aria-label="Network metrics"></div>
+                <aside class="dashboard-quote" aria-label="Stockline mantra">
+                    <span class="dashboard-quote-label">TODAY'S OPS MANTRA</span>
+                    <p>“Stock sorted. Stress avoided.”</p>
+                    <span class="dashboard-quote-byline">— the Stockline rule</span>
+                </aside>
+                <div id="stats" class="stats dashboard-stats" aria-label="Inventory metrics"></div>
+                <div class="dashboard-actions" aria-label="Quick actions">
+                    <button type="button" class="button primary" data-dialog="order"><svg><use href="#i-plus"/></svg>New order</button>
+                    <button type="button" class="button secondary" data-dialog="restock">Restock inventory</button>
+                    <a class="text-link" href="#inventory">View inventory <svg><use href="#i-arrow"/></svg></a>
+                </div>
                 <div class="overview-grid">
                     <article class="panel">
-                        <div class="panel-head"><div><h2>Warehouse stock</h2><p>Available and reserved units by location</p></div>
-                            <a class="text-link" href="#inventory">View inventory <svg><use href="#i-arrow"/></svg></a>
-                        </div>
+                        <div class="panel-head"><div><h2>Warehouse stock</h2><p>Available and reserved units by location in your access scope</p></div></div>
                         <div id="network" class="network"></div>
                     </article>
-                    <article class="panel demo-card">
-                        <div class="demo-icon"><svg><use href="#i-race"/></svg></div>
-                        <p class="eyebrow">Interactive demo</p>
-                        <h2>Put stock under pressure</h2>
-                        <p>Send simultaneous orders for the same stock and watch how the system handles competing reservations.</p>
-                        <a class="button dark-button" href="#race">Open Concurrency Lab <svg><use href="#i-arrow"/></svg></a>
+                    <article class="panel alert-panel">
+                        <div class="panel-head"><div><h2>Low-stock locations</h2><p>Items at or below their configured minimum</p></div>
+                            <a class="text-link" href="#inventory">Manage stock <svg><use href="#i-arrow"/></svg></a></div>
+                        <div id="overview-alerts" class="table-wrap"></div>
                     </article>
                 </div>
                 <article class="panel">
@@ -84,40 +124,49 @@
                     </div>
                     <div id="recent-orders" class="table-wrap"></div>
                 </article>
-                <article class="panel alert-panel">
-                    <div class="panel-head"><div><h2>Replenishment alerts</h2><p>Products at or below their warehouse threshold</p></div>
-                        <a class="text-link" href="#inventory">Manage inventory <svg><use href="#i-arrow"/></svg></a></div>
-                    <div id="overview-alerts" class="table-wrap"></div>
-                </article>
             </section>
 
             <section data-view="inventory" hidden>
                 <div class="page-heading with-actions">
                     <div><p class="eyebrow">Stock operations</p><h1>Inventory</h1><p>Monitor, restock, and move available units between warehouses.</p></div>
-                    <div class="actions"><button type="button" class="button secondary" data-dialog="transfer">Transfer stock</button>
-                        <button type="button" class="button secondary" data-dialog="adjust">Adjust stock</button>
+                    <div class="actions"><button type="button" class="button secondary" data-manager-only data-dialog="transfer">Transfer stock</button>
+                        <button type="button" class="button secondary" data-manager-only data-dialog="adjust">Adjust stock</button>
                         <button type="button" class="button secondary" data-dialog="damage">Record damage</button>
-                        <button type="button" class="button secondary" data-dialog="writeoff">Write off</button>
+                        <button type="button" class="button secondary" data-manager-only data-dialog="writeoff">Write off</button>
                         <button type="button" class="button secondary" data-dialog="return">Record return</button>
                         <button type="button" class="button primary" data-dialog="restock"><svg><use href="#i-plus"/></svg>Restock</button></div>
                 </div>
+                <div id="network-inventory-summary" class="stats inventory-summary network-summary"></div>
                 <article class="panel product-inventory-panel">
                     <div class="panel-head"><div><h2>Product network availability</h2>
-                        <p>Network stock is available + reserved + damaged. Status depends on network-wide available units.</p></div></div>
+                        <p>Totals cover all warehouses for administrators and only assigned warehouses for warehouse users.</p></div></div>
                     <div id="product-inventory-table" class="table-wrap"></div>
                     <div id="product-warehouse-detail" class="product-warehouse-detail"></div>
+                </article>
+                <article class="panel">
+                    <div class="panel-head"><div><h2>Below-threshold products</h2><p>Availability is compared with each warehouse’s configured minimum.</p></div></div>
+                    <div id="network-low-stock-table" class="table-wrap"></div>
+                </article>
+                <article class="panel" data-manager-only>
+                    <div class="panel-head"><div><h2>Replenishment suggestions</h2>
+                        <p>Threshold-based recommendations for assigned warehouses. Restocking remains a human decision.</p></div></div>
+                    <div id="replenishment-table" class="table-wrap"></div>
                 </article>
                 <article class="panel">
                     <div class="panel-head filters">
                         <label class="search"><svg><use href="#i-search"/></svg><input id="stock-search" placeholder="Search product or SKU" aria-label="Search product or SKU"></label>
                         <select id="stock-warehouse" aria-label="Warehouse"><option value="">All warehouses</option></select>
-                    <label class="check-label"><input type="checkbox" id="stock-low"> Below threshold</label>
+                        <select id="stock-category" aria-label="Product category"><option value="">All categories</option></select>
+                        <select id="stock-status" aria-label="Stock status">
+                            <option value="">All stock statuses</option><option value="AVAILABLE">In stock</option>
+                            <option value="LOW">Low stock</option><option value="OUT">Out of stock</option>
+                        </select>
                     </div>
                     <div id="inventory-table" class="table-wrap"></div>
                 </article>
             </section>
 
-            <section data-view="history" hidden>
+            <section data-view="history" data-manager-only hidden>
                 <div class="page-heading"><p class="eyebrow">Inventory control</p><h1>Inventory History</h1><p>Trace every stock movement, compare ledger balances, and review current stock alerts.</p></div>
                 <div id="inventory-summary" class="stats inventory-summary"></div>
                 <article class="panel">
@@ -130,10 +179,10 @@
                         <label>Order ID<input id="movement-order" placeholder="UUID"></label>
                     </div>
                     <div class="panel-head history-actions"><span id="movement-count" class="muted">Latest movements</span>
-                        <button id="reconcile-button" type="button" class="button secondary">Run reconciliation</button></div>
+                        <button id="reconcile-button" type="button" class="button secondary" data-admin-only>Run reconciliation</button></div>
                     <div id="movement-table" class="table-wrap"></div>
                 </article>
-                <article class="panel reconciliation-panel">
+                <article class="panel reconciliation-panel" data-admin-only>
                     <div class="panel-head"><div><h2>Inventory reconciliation</h2><p>Ledger totals compared with current inventory buckets. Differences require an explicit adjustment.</p></div></div>
                     <div id="reconciliation-table" class="table-wrap"></div>
                 </article>
@@ -153,16 +202,33 @@
             </section>
 
             <section data-view="warehouses" hidden>
-                <div class="page-heading"><p class="eyebrow">Network setup</p><h1>Catalog</h1><p>Manage warehouse locations and the products they carry. Lower priority numbers are allocated first.</p></div>
+                <div class="page-heading"><p class="eyebrow">Your network</p><h1>Warehouses</h1><p>Location status, available stock, and low-stock products in your authorized warehouses.</p></div>
                 <div class="catalog-grid">
-                    <article class="panel"><div class="panel-head"><div><h2>Warehouses</h2><p>Fulfillment locations</p></div><button type="button" class="button secondary" data-dialog="warehouse"><svg><use href="#i-plus"/></svg>Add warehouse</button></div>
+                    <article class="panel"><div class="panel-head"><div><h2>Locations</h2><p>Open a warehouse to review its stock and activity</p></div><button type="button" class="button secondary" data-admin-only data-dialog="warehouse"><svg><use href="#i-plus"/></svg>Add warehouse</button></div>
                         <div id="warehouse-table" class="table-wrap"></div></article>
-                    <article class="panel"><div class="panel-head"><div><h2>Products</h2><p>Stock keeping units</p></div><button type="button" class="button secondary" data-dialog="product"><svg><use href="#i-plus"/></svg>Add product</button></div>
+                    <article class="panel" data-admin-only><div class="panel-head"><div><h2>Products</h2><p>Stock keeping units</p></div><button type="button" class="button secondary" data-dialog="product"><svg><use href="#i-plus"/></svg>Add product</button></div>
                         <div id="product-table" class="table-wrap"></div></article>
                 </div>
             </section>
 
-            <section data-view="race" hidden>
+            <section data-view="users" data-admin-only hidden>
+                <div class="page-heading"><p class="eyebrow">Settings</p><h1>User management</h1><p>Create administrator and warehouse manager accounts, and assign manager access to specific warehouses.</p></div>
+                <div class="catalog-grid">
+                    <article class="panel"><div class="panel-head"><div><h2>Add a user</h2><p>Passwords must contain at least 12 characters.</p></div></div>
+                        <form id="user-create-form" class="form-body">
+                            <label>Username<input name="username" autocomplete="off" maxlength="64" required></label>
+                            <label>Initial password<input name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></label>
+                            <label>Role<select name="role"><option value="WAREHOUSE_MANAGER">Warehouse manager</option><option value="ADMIN">Administrator</option></select></label>
+                            <label>Assigned warehouses<select name="warehouseCodes" id="user-warehouses" multiple size="3" aria-label="Assigned warehouses"></select></label>
+                            <p class="muted">Warehouse assignments apply to warehouse managers. Administrators can access the full network.</p>
+                            <p class="form-error" role="alert" hidden></p><button class="button primary" type="submit">Create user</button>
+                        </form></article>
+                    <article class="panel"><div class="panel-head"><div><h2>Accounts</h2><p>Review roles and warehouse access.</p></div></div>
+                        <div id="user-table" class="table-wrap"></div></article>
+                </div>
+            </section>
+
+            <section data-view="race" data-admin-only hidden>
                 <div class="page-heading"><p class="eyebrow">System tools</p><h1>Concurrency Lab</h1><p>Compare unprotected writes, version checks, and database row locks under the same isolated H2 workload.</p></div>
                 <div class="race-grid">
                     <article class="panel race-settings">
@@ -174,7 +240,7 @@
                                 <button type="button" class="strategy-card" data-mode="PESSIMISTIC" aria-pressed="false"><strong>Pessimistic</strong><span>Database row locks</span></button>
                             </div>
                             <label>Concurrent buyers<select name="buyers"><option>10</option><option>50</option><option selected>100</option><option>250</option><option>500</option><option>1000</option></select></label>
-                            <label>Starting inventory<input name="stock" type="number" min="1" max="1000000" value="100" required></label>
+                            <label>Starting inventory<input name="stock" type="number" min="1" max="1000000" value="10" required></label>
                             <label>Warehouses<input name="warehouses" type="number" min="1" max="32" value="4" required></label>
                             <label>Units requested per buyer<input name="quantity" type="number" min="1" max="10000" value="1" required></label>
                             <label>Concurrent workers<input name="workers" type="number" min="1" max="128" value="32" required></label>
@@ -199,11 +265,50 @@
                         </div>
                     </article>
                 </div>
+                <article class="panel benchmark-report-panel">
+                    <div class="panel-head"><div><h2>Real API benchmark report</h2>
+                        <p>Load a saved report from the isolated HTTP benchmark. The file is inspected locally in this browser.</p></div></div>
+                    <div class="benchmark-report-controls">
+                        <label for="benchmark-report-file">Select benchmark JSON report</label>
+                        <input id="benchmark-report-file" type="file" accept="application/json,.json">
+                        <p class="muted">Only structurally valid reports with passing inventory and reconciliation checks are shown. H2 timings do not represent PostgreSQL production capacity.</p>
+                        <p id="benchmark-report-error" class="form-error" role="alert" hidden></p>
+                    </div>
+                    <div id="benchmark-report-result" aria-live="polite"></div>
+                </article>
             </section>
 
-            <section data-view="events" hidden>
-                <div class="page-heading"><p class="eyebrow">System tools</p><h1>Event Log</h1><p>Inspect the latest reservation events persisted in the fulfillment outbox.</p></div>
-                <article class="panel"><div class="panel-head"><div><h2>Fulfillment outbox</h2><p>Latest 50 events</p></div></div><div id="events-table" class="table-wrap"></div></article>
+            <section data-view="events" data-admin-only hidden>
+                <div class="page-heading"><p class="eyebrow">System tools</p><h1>Event Log</h1><p>Inspect event delivery, attempts, retries, and dead letters persisted in the outbox.</p></div>
+                <article class="panel">
+                    <div class="panel-head filters"><label class="search"><svg><use href="#i-search"/></svg>
+                        <input id="event-search" placeholder="Search type, event, or order ID" aria-label="Search events"></label>
+                        <select id="event-type-filter" aria-label="Event type"><option value="">All event types</option></select>
+                        <select id="event-status-filter" aria-label="Event status"><option value="">All statuses</option></select>
+                        <button id="event-refresh" type="button" class="button secondary">Refresh</button></div>
+                    <div class="panel-head"><div><h2>Fulfillment outbox</h2><p>Events use at-least-once delivery with idempotent business effects.</p></div>
+                        <span id="event-worker-health" class="muted"></span></div>
+                    <div id="events-table" class="table-wrap"></div>
+                    <div class="pager"><button id="event-page-back" class="button secondary" type="button">Previous</button>
+                        <span id="event-page">Page 1</span><button id="event-page-next" class="button secondary" type="button">Next</button></div>
+                    <div id="event-metrics" class="muted"></div>
+                </article>
+            </section>
+
+            <section data-view="operations" data-admin-only hidden>
+                <div class="page-heading with-actions">
+                    <div><p class="eyebrow">System tools</p><h1>Operations Health</h1>
+                        <p>Live application probes, connection-pool use, request latency, outbox depth, and ledger integrity.</p></div>
+                    <button id="operations-refresh" type="button" class="button secondary">Refresh snapshot</button>
+                </div>
+                <p id="operations-updated" class="muted operations-updated">No operational snapshot loaded.</p>
+                <div id="operations-summary" class="stats operations-summary"></div>
+                <article class="panel">
+                    <div class="panel-head"><div><h2>Recent event failures</h2>
+                        <p>Retry-wait and dead-letter records from the persisted outbox.</p></div></div>
+                    <div id="operations-failures" class="table-wrap"></div>
+                </article>
+                <p id="operations-error" class="form-error operations-error" role="alert" hidden></p>
             </section>
         </main>
         <footer class="footer"><span>Stockline Operations Console</span><span>Warehouse inventory &amp; fulfillment</span></footer>

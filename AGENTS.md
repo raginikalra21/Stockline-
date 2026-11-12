@@ -2,29 +2,32 @@
 
 ## Project Structure
 
-Stockline is a Java 17 and Spring Boot inventory application. Backend code lives in `src/main/java/in/stockline/`: `ApiController` exposes HTTP endpoints, `InventoryService` owns transactional stock and order rules, `Store` contains JDBC queries, and `InventoryAuditService` reconciles the movement ledger. Versioned database migrations are in `src/main/resources/db/migration/`. The vanilla HTML, CSS, and JavaScript dashboard is under `src/main/resources/static/`. JUnit tests are in `src/test/java/in/stockline/`.
+Java 17 / Spring Boot 3 code is grouped under `src/main/java/in/stockline`: `api`, `domain`, `service`, `persistence/repository`, `events`, `security`, and `simulation/concurrency`. Flyway SQL is in `src/main/resources/db/migration`, the browser client in `src/main/resources/static`, and tests in `src/test/java/in/stockline`.
 
 ## Build, Test, and Run
 
-- `mvn clean verify` compiles, runs the test suite, and packages the application.
-- `mvn test` runs the JUnit 5 tests.
-- `mvn spring-boot:run` starts the local app at `http://localhost:8080`.
-- `node --check src/main/resources/static/app.js` checks frontend JavaScript syntax.
+- `mvn clean verify` runs tests and packages the executable JAR.
+- `mvn spring-boot:run` starts the local H2 development profile; set `STOCKLINE_ADMIN_USERNAME` and `STOCKLINE_ADMIN_PASSWORD` first to provision the initial administrator.
+- `docker compose up --build` starts PostgreSQL and the application; configure `.env` from `.env.example` first.
+- `mvn -Dtest=InventoryServiceTest test` runs the inventory/concurrency service tests. PostgreSQL Testcontainers tests run when Docker is available and skip otherwise.
+- `node --check src/main/resources/static/app.js` checks browser JavaScript syntax.
 
-The default development profile uses the file-backed H2 database in `data/`; do not commit that database or Maven output under `target/`.
+## Style and Design
 
-## Coding Style and Invariants
+Use four spaces for Java indentation, types in `UpperCamelCase`, and members in `lowerCamelCase`. Put validated request records in `api/dto` and SQL in repositories. Keep stock/order transactions atomic with idempotency, ordered updates, version checks, and ledger writes. Keep `service/allocation` side-effect free; placement revalidates and reserves in one transaction. Write outbox events with business changes and make handlers idempotent. Add forward-only migrations.
 
-Use four spaces for Java and frontend indentation. Follow Java naming conventions (`UpperCamelCase` types, `lowerCamelCase` members, uppercase enum constants) and the existing plain JavaScript style. No formatter or linter is configured. Keep SQL access in `Store` and stock mutations in `InventoryService` transactions. Inventory is recorded per `(sku, warehouse_code)`; network totals are calculated from those persisted rows. Preserve version-checked updates, idempotency keys, and atomic movement-ledger writes. Every movement must balance from its previous quantity to its new quantity. Concurrency demonstrations must use isolated simulation data.
+## Tests
 
-## Testing Guidelines
+Name JUnit tests for verified behavior. Use H2 transactions for service invariants, MockMvc for API/security, and Testcontainers for PostgreSQL behavior. Assert persisted balances, allocations, ledger entries, and rollback outcomes.
 
-Use JUnit 5 and descriptive test names, for example `concurrentTransfersConserveStockAndRejectExcessRequests`. Cover rollback, split warehouse allocations, network availability, concurrent reservations, and ledger reconciliation when changing inventory behavior. No coverage threshold is configured.
+## Observability and Benchmarks
+
+Keep actuator details and metrics admin-only; liveness must not depend on PostgreSQL, while readiness must. Preserve request correlation when writing outbox events. Run `scripts/run-benchmark.sh` only against its isolated in-memory profile; keep JSON under ignored `benchmark-results/`.
 
 ## Commits and Pull Requests
 
-This checkout has no Git metadata, so commit conventions cannot be verified. Prefer a short imperative subject such as `Prefer selected warehouse for reservations`. Pull requests should describe behavior and API or schema changes, list verification commands and results, link relevant issues, and include screenshots for dashboard changes.
+Recent commits use short sentence-case summaries (for example, `Add PostgreSQL deployment and integration tests`). Keep each commit focused. Pull requests should explain the behavior change, list migrations/configuration requirements, include relevant test results, link related issues, and attach screenshots for visible UI changes.
 
-## Configuration
+## Configuration and Security
 
-Keep credentials and machine-specific settings outside source control. PostgreSQL connection settings come from environment variables; use the documented development profile for local H2 work.
+Never commit `.env`, credentials, database files, benchmark results, or generated `target/` output. Production and PostgreSQL profiles require a strong Base64 `JWT_SECRET`; use environment variables for admin bootstrap and database settings. Preserve server-side warehouse checks even when the UI hides restricted views.

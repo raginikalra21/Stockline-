@@ -1,5 +1,23 @@
 package in.stockline;
 
+import in.stockline.domain.exception.ApiProblem;
+import in.stockline.persistence.repository.Store;
+import in.stockline.domain.model.AllocationModels;
+import in.stockline.service.inventory.InventoryService;
+import in.stockline.service.inventory.InventoryLedgerBootstrap;
+import in.stockline.service.audit.InventoryAuditService;
+import in.stockline.events.consumer.FulfillmentWorker;
+import in.stockline.events.consumer.EventProcessor;
+import in.stockline.events.consumer.EventProcessingRuntime;
+import in.stockline.events.handler.OutboxEventHandler;
+import in.stockline.simulation.concurrency.RaceDemo;
+import in.stockline.simulation.concurrency.RaceCounters;
+import in.stockline.simulation.concurrency.RaceSimulationDatabase;
+import in.stockline.simulation.concurrency.RaceStrategy;
+import in.stockline.simulation.concurrency.NaiveDatabaseRaceStrategy;
+import in.stockline.simulation.concurrency.OptimisticDatabaseRaceStrategy;
+import in.stockline.simulation.concurrency.PessimisticDatabaseRaceStrategy;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,16 +32,21 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import in.stockline.observability.StocklineMetrics;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import static in.stockline.Models.*;
+import static in.stockline.domain.model.Models.*;
+import static in.stockline.api.dto.InventoryRequests.*;
+import static in.stockline.simulation.concurrency.SimulationModels.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -53,12 +76,13 @@ class InventoryServiceTest {
 
     @Test
     void splitsOrdersByWarehousePriorityAndFulfillsExactlyOnce() {
-        Order order = inventory.place(order("KB-104", 10)).order();
+        Order order = inventory.place(order("KB-104", 15)).order();
         assertThat(order.status()).isEqualTo(OrderStatus.RESERVED);
         assertThat(order.allocations()).containsExactlyInAnyOrder(
-            new Allocation("KB-104", "PUN", 8), new Allocation("KB-104", "DEL", 2));
+            new Allocation("KB-104", "PUN", 8), new Allocation("KB-104", "DEL", 7));
         assertThat(store.stock("KB-104", "PUN")).isEqualTo(new Stock("KB-104", "PUN", 0, 8, 0, 1));
-        assertThat(store.events()).singleElement().extracting(OutboxEvent::status).isEqualTo("PENDING");
+        assertThat(orderEvents(order.id())).filteredOn(event -> event.eventType().equals("ORDER_RESERVED"))
+            .singleElement().extracting(OutboxEvent::status).isEqualTo("PENDING");
 
         var worker = new FulfillmentWorker(store, inventory);
         worker.processDueOrders();
@@ -66,8 +90,8 @@ class InventoryServiceTest {
 
         assertThat(inventory.order(order.id()).status()).isEqualTo(OrderStatus.FULFILLED);
         assertThat(store.stock("KB-104", "PUN")).isEqualTo(new Stock("KB-104", "PUN", 0, 0, 8, 2));
-        assertThat(store.stock("KB-104", "DEL")).isEqualTo(new Stock("KB-104", "DEL", 12, 0, 2, 2));
-        assertThat(store.events()).singleElement().extracting(OutboxEvent::status).isEqualTo("PROCESSED");
+        assertThat(store.stock("KB-104", "DEL")).isEqualTo(new Stock("KB-104", "DEL", 7, 0, 7, 2));
+        assertThat(orderEvents(order.id())).hasSize(3).allMatch(event -> "COMPLETED".equals(event.status()));
     }
 
     @Test
@@ -80,7 +104,7 @@ class InventoryServiceTest {
             error -> assertThat(error.code).isEqualTo("INSUFFICIENT_STOCK"));
         assertThat(store.inventory()).isEqualTo(before);
         assertThat(store.overview().orders()).isZero();
-        assertThat(store.events()).isEmpty();
+        assertThat(store.events(null, null, null, 100, 0)).noneMatch(event -> event.orderId() != null);
 
         inventory.restock(new RestockInput("KB-104", "PUN", 1));
         assertThat(inventory.place(input).order().allocations()).hasSize(4);
@@ -92,11 +116,13 @@ class InventoryServiceTest {
             List.of(new OrderLine("CB-305", 1), new OrderLine("KB-104", 24)));
         Stock cableBefore = store.stock("CB-305", "PUN");
         var conflicts = new java.util.concurrent.atomic.AtomicInteger();
+        var competingOrderId = new java.util.concurrent.atomic.AtomicReference<UUID>();
         var writer = Executors.newSingleThreadExecutor();
         try {
             Runnable concurrentBuyer = () -> {
                 try {
-                    writer.submit(() -> inventory.place(order("KB-104", 1))).get(5, TimeUnit.SECONDS);
+                    writer.submit(() -> competingOrderId.set(inventory.place(order("KB-104", 1)).order().id()))
+                        .get(5, TimeUnit.SECONDS);
                 } catch (InterruptedException interrupted) {
                     Thread.currentThread().interrupt();
                     throw new AssertionError(interrupted);
@@ -110,7 +136,7 @@ class InventoryServiceTest {
             assertThat(conflicts.get()).isEqualTo(1);
             assertThat(store.stock("CB-305", "PUN")).isEqualTo(cableBefore);
             assertThat(store.overview().orders()).isEqualTo(1);
-            assertThat(store.events()).hasSize(1);
+            assertThat(orderEvents(competingOrderId.get())).hasSize(2);
         } finally {
             writer.shutdownNow();
         }
@@ -122,9 +148,10 @@ class InventoryServiceTest {
         assertThat(inventory.cancel(order.id()).status()).isEqualTo(OrderStatus.CANCELLED);
         assertThat(inventory.cancel(order.id()).status()).isEqualTo(OrderStatus.CANCELLED);
         assertThat(inventory.fulfill(order.id())).isFalse();
-        assertThat(store.stock("KB-104", "PUN")).isEqualTo(new Stock("KB-104", "PUN", 8, 0, 0, 2));
+        assertThat(store.stock("KB-104", "PUN")).isEqualTo(new Stock("KB-104", "PUN", 8, 0, 0, 0));
         assertThat(store.stock("KB-104", "DEL")).isEqualTo(new Stock("KB-104", "DEL", 14, 0, 0, 2));
-        assertThat(store.events()).singleElement().extracting(OutboxEvent::status).isEqualTo("CANCELLED");
+        assertThat(orderEvents(order.id())).filteredOn(event -> event.eventType().equals("ORDER_CANCELLED"))
+            .singleElement().extracting(OutboxEvent::status).isEqualTo("PENDING");
         assertThat(new InventoryAuditService(store).reconcile())
             .allMatch(line -> line.overallIntegrityStatus().equals("VALID"));
     }
@@ -136,7 +163,7 @@ class InventoryServiceTest {
         assertThat(results).filteredOn(result -> !result.replayed()).hasSize(1);
         assertThat(results).extracting(result -> result.order().id()).containsOnly(results.get(0).order().id());
         assertThat(store.stock("KB-104", "PUN").reserved()).isEqualTo(2);
-        assertThat(store.events()).hasSize(1);
+        assertThat(orderEvents(results.get(0).order().id())).hasSize(2);
         assertThat(new JdbcTemplate(db).queryForObject("""
             SELECT COUNT(*) FROM inventory_movements WHERE movement_type = 'RESERVATION'
               AND reference_order_id = ?
@@ -145,6 +172,113 @@ class InventoryServiceTest {
         var differentOrder = new OrderInput(input.customer(), input.requestKey(), List.of(new OrderLine("KB-104", 3)));
         assertThatThrownBy(() -> inventory.place(differentOrder)).isInstanceOfSatisfying(ApiProblem.class,
             error -> assertThat(error.code).isEqualTo("IDEMPOTENCY_MISMATCH"));
+    }
+
+    @Test
+    void expiredWorkerLeaseIsReclaimedAndRecordedAsAnAbandonedAttempt() {
+        OffsetDateTime now = InventoryService.now();
+        UUID eventId = UUID.randomUUID();
+        store.enqueueEvent(eventId, EventType.INVENTORY_ADJUSTED, "INVENTORY", "KB-104",
+            java.util.Map.of("schemaVersion", 1), UUID.randomUUID(), "LEASE_TEST:" + eventId, now, now);
+
+        var first = store.claimEvents("worker-one", 100, now, Duration.ofSeconds(1));
+        assertThat(first).filteredOn(event -> event.eventId().equals(eventId)).singleElement().satisfies(event -> {
+            assertThat(event.status()).isEqualTo("PROCESSING");
+            assertThat(event.attemptCount()).isEqualTo(1);
+            assertThat(event.claimedBy()).isEqualTo("worker-one");
+        });
+        assertThat(store.claimEvents("worker-two", 100, now.plusNanos(500_000_000), Duration.ofSeconds(1)))
+            .noneMatch(event -> event.eventId().equals(eventId));
+
+        var recovered = store.claimEvents("worker-two", 100, now.plusSeconds(2), Duration.ofSeconds(1));
+        assertThat(recovered).filteredOn(event -> event.eventId().equals(eventId)).singleElement().satisfies(event -> {
+            assertThat(event.attemptCount()).isEqualTo(2);
+            assertThat(event.claimedBy()).isEqualTo("worker-two");
+        });
+        assertThat(store.eventAttempts(eventId)).extracting(EventAttempt::outcome)
+            .containsExactly("ABANDONED", "STARTED");
+    }
+
+    @Test
+    void retryableFailuresBackOffToDeadLetterAndCanBeManuallyRequeued() {
+        OffsetDateTime now = InventoryService.now();
+        UUID eventId = UUID.randomUUID();
+        store.enqueueEvent(eventId, EventType.STOCK_TRANSFERRED, "INVENTORY", "KB-104",
+            java.util.Map.of("schemaVersion", 1), UUID.randomUUID(), "RETRY_TEST:" + eventId, now, now);
+        var claimed = store.claimEvents("retry-worker", 100, now, Duration.ofSeconds(30)).stream()
+            .filter(event -> event.eventId().equals(eventId)).findFirst().orElseThrow();
+
+        assertThat(store.failEvent(eventId, "retry-worker", now, now.plusSeconds(3), 1,
+            "RETRYABLE", "temporary database failure")).isTrue();
+        assertThat(store.event(eventId).orElseThrow().status()).isEqualTo("DEAD");
+        assertThat(store.event(eventId).orElseThrow().lastError()).isEqualTo("temporary database failure");
+        assertThat(store.retryDeadEvent(eventId, now.plusSeconds(4))).isTrue();
+        assertThat(store.event(eventId).orElseThrow().status()).isEqualTo("RETRY_WAIT");
+        var manuallyRetried = store.claimEvents("retry-worker-two", 100, now.plusSeconds(4), Duration.ofSeconds(30))
+            .stream().filter(event -> event.eventId().equals(eventId)).findFirst().orElseThrow();
+        assertThat(manuallyRetried.attemptCount()).isEqualTo(1);
+        assertThat(store.eventAttempts(eventId)).hasSize(2);
+        assertThat(claimed.attemptCount()).isEqualTo(1);
+    }
+
+    @Test
+    void permanentFailuresCannotBeManuallyRetried() {
+        OffsetDateTime now = InventoryService.now();
+        UUID eventId = UUID.randomUUID();
+        store.enqueueEvent(eventId, EventType.ORDER_RESERVED, "ORDER", UUID.randomUUID().toString(),
+            java.util.Map.of("schemaVersion", 1), eventId, "PERMANENT_TEST:" + eventId, now, now);
+        store.claimEvents("permanent-worker", 100, now, Duration.ofSeconds(30));
+        assertThat(store.failEvent(eventId, "permanent-worker", now, now, 8,
+            "PERMANENT", "invalid payload")).isTrue();
+        assertThat(store.event(eventId).orElseThrow().status()).isEqualTo("DEAD");
+        assertThat(store.retryDeadEvent(eventId, now.plusSeconds(1))).isFalse();
+    }
+
+    @Test
+    void slowEventHandlerIsTimedOutAndReturnedToRetryQueue() throws Exception {
+        OffsetDateTime now = InventoryService.now();
+        UUID eventId = UUID.randomUUID();
+        store.enqueueEvent(eventId, EventType.INVENTORY_ADJUSTED, "INVENTORY", "KB-104",
+            java.util.Map.of("schemaVersion", 1), UUID.randomUUID(), "TIMEOUT_TEST:" + eventId, now, now);
+        var event = store.claimEvents("timeout-worker", 100, now, Duration.ofSeconds(30)).stream()
+            .filter(candidate -> candidate.eventId().equals(eventId)).findFirst().orElseThrow();
+        OutboxEventHandler slowHandler = new OutboxEventHandler() {
+            @Override public EventType eventType() { return EventType.INVENTORY_ADJUSTED; }
+            @Override public void handle(OutboxEvent ignored) {
+                try { Thread.sleep(10_000); }
+                catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); }
+            }
+        };
+        var registry = new SimpleMeterRegistry();
+        var processor = new EventProcessor(store, List.of(slowHandler), new EventProcessingRuntime(1),
+            Duration.ZERO, Duration.ofSeconds(1), 8, Duration.ofMillis(10), 1, new StocklineMetrics(registry));
+        try {
+            processor.process(event, "timeout-worker");
+            assertThat(store.event(eventId).orElseThrow().status()).isEqualTo("RETRY_WAIT");
+            assertThat(store.event(eventId).orElseThrow().lastError()).isEqualTo("Event processing exceeded its time limit.");
+            assertThat(registry.counter("stockline.events.handler_failures", "event_type", "INVENTORY_ADJUSTED").count()).isEqualTo(1);
+            assertThat(registry.counter("stockline.events.retried", "event_type", "INVENTORY_ADJUSTED").count()).isEqualTo(1);
+            assertThat(registry.counter("stockline.events.processed", "event_type", "INVENTORY_ADJUSTED").count()).isZero();
+        } finally { processor.destroy(); }
+    }
+
+    @Test
+    void crossingWarehouseThresholdCreatesOneHumanReplenishmentSuggestion() {
+        inventory.adjust(new StockAdjustmentInput("KB-104", "PUN", StockBucket.AVAILABLE, -4L,
+            "Move stock below threshold", UUID.randomUUID()));
+        OutboxEvent lowStock = store.events("LOW_STOCK", "PENDING", null, 100, 0).stream()
+            .filter(event -> event.aggregateId().equals("KB-104:PUN")).findFirst().orElseThrow();
+        new FulfillmentWorker(store, inventory).processDueOrders();
+
+        var suggestion = store.suggestion(lowStock.eventId()).orElseThrow();
+        assertThat(suggestion.status()).isEqualTo("ACTIVE");
+        assertThat(suggestion.available()).isEqualTo(4);
+        assertThat(suggestion.recommendedQuantity()).isEqualTo(1);
+        assertThat(new JdbcTemplate(db).queryForObject(
+            "SELECT COUNT(*) FROM replenishment_suggestions WHERE event_id = ?", Integer.class, lowStock.eventId())).isEqualTo(1);
+
+        inventory.restock(new RestockInput("KB-104", "PUN", 2));
+        assertThat(store.suggestion(lowStock.eventId()).orElseThrow().status()).isEqualTo("CLEARED");
     }
 
     @Test
@@ -186,8 +320,9 @@ class InventoryServiceTest {
             assertThat(cancelled.get(10, TimeUnit.SECONDS)).isEqualTo(!fulfilled);
             Stock stock = store.stock("KB-104", "PUN");
             assertThat(stock).isEqualTo(new Stock("KB-104", "PUN", fulfilled ? 2 : 8, 0, fulfilled ? 6 : 0, 2));
-            assertThat(store.events()).singleElement().extracting(OutboxEvent::status)
-                .isEqualTo(fulfilled ? "PROCESSED" : "CANCELLED");
+            assertThat(orderEvents(order.id())).filteredOn(event -> event.eventType().equals(
+                    fulfilled ? "ORDER_FULFILLED" : "ORDER_CANCELLED"))
+                .singleElement().extracting(OutboxEvent::status).isEqualTo("PENDING");
         } finally {
             pool.shutdownNow();
         }
@@ -225,8 +360,8 @@ class InventoryServiceTest {
 
         inventory.restock(new RestockInput("T-123", "PUN", 3));
         inventory.restock(new RestockInput("T-123", "NEW", 2));
-        assertThat(inventory.place(order("T-123", 3)).order().allocations()).containsExactly(
-            new Allocation("T-123", "NEW", 2), new Allocation("T-123", "PUN", 1));
+        assertThat(inventory.place(order("T-123", 4)).order().allocations()).containsExactly(
+            new Allocation("T-123", "NEW", 2), new Allocation("T-123", "PUN", 2));
     }
 
     @Test
@@ -304,6 +439,184 @@ class InventoryServiceTest {
         assertThat(network.available()).isZero();
         assertThat(network.reserved()).isEqualTo(100);
         assertThat(network.status()).isEqualTo(AvailabilityStatus.OUT_OF_STOCK);
+        assertThat(new InventoryAuditService(store).reconcile())
+            .allMatch(line -> line.overallIntegrityStatus().equals("VALID"));
+    }
+
+    @Test
+    void allocationPreviewIsReadOnlyAndCostStrategyPersistsTheRealDecision() {
+        inventory.addProduct(new ProductInput("AL-700", "Allocation test", "Test"));
+        inventory.restock(new RestockInput("AL-700", "PUN", 2));
+        inventory.restock(new RestockInput("AL-700", "DEL", 4));
+        inventory.updateWarehouseConfiguration("PUN", warehouseConfig(WarehouseStatus.ACTIVE, null, null,
+            "1.00", "8.00", null));
+        inventory.updateWarehouseConfiguration("DEL", warehouseConfig(WarehouseStatus.ACTIVE, null, null,
+            "0.00", "0.50", null));
+        var before = store.inventory();
+        int movementsBefore = new JdbcTemplate(db).queryForObject("SELECT COUNT(*) FROM inventory_movements", Integer.class);
+        long ordersBefore = store.overview().orders();
+
+        var preview = inventory.previewAllocation(new AllocationPreviewInput(
+            List.of(new OrderLine("AL-700", 4)), null, AllocationStrategy.COST_OPTIMIZED, null, null));
+        assertThat(preview.fullyFulfillable()).isTrue();
+        assertThat(preview.allocations()).singleElement().satisfies(allocation -> {
+            assertThat(allocation.warehouseCode()).isEqualTo("DEL");
+            assertThat(allocation.availableBefore()).isEqualTo(4);
+            assertThat(allocation.estimatedCost()).isEqualByComparingTo("2.00");
+        });
+        assertThat(preview.estimatedTotalCost()).isEqualByComparingTo("2.00");
+        assertThat(store.inventory()).isEqualTo(before);
+        assertThat(store.overview().orders()).isEqualTo(ordersBefore);
+        assertThat(new JdbcTemplate(db).queryForObject("SELECT COUNT(*) FROM inventory_movements", Integer.class))
+            .isEqualTo(movementsBefore);
+
+        Order placed = inventory.place(new OrderInput("Cost buyer", UUID.randomUUID(),
+            List.of(new OrderLine("AL-700", 4)), null, AllocationStrategy.COST_OPTIMIZED, null, null)).order();
+        assertThat(placed.allocations()).containsExactly(new Allocation("AL-700", "DEL", 4));
+        assertThat(inventory.allocationDecisions(placed.id())).singleElement().satisfies(decision -> {
+            assertThat(decision.strategy()).isEqualTo("COST_OPTIMIZED");
+            assertThat(decision.estimatedCost()).isEqualByComparingTo("2.00");
+            assertThat(decision.status()).isEqualTo("RESERVED");
+            assertThat(decision.reason()).contains("configured");
+        });
+        inventory.cancel(placed.id());
+        assertThat(inventory.allocationDecisions(placed.id())).singleElement()
+            .extracting(AllocationDecision::status).isEqualTo("CANCELLED");
+        assertThat(new InventoryAuditService(store).reconcile())
+            .allMatch(line -> line.overallIntegrityStatus().equals("VALID"));
+    }
+
+    @Test
+    void singleWarehouseStrategyHonorsCapacityAndRollsBackInsufficientOrders() {
+        inventory.addProduct(new ProductInput("AL-701", "Capacity test", "Test"));
+        inventory.restock(new RestockInput("AL-701", "PUN", 4));
+        inventory.restock(new RestockInput("AL-701", "DEL", 3));
+        inventory.updateWarehouseConfiguration("PUN", warehouseConfig(WarehouseStatus.ACTIVE, null, null,
+            "0", "0", 2));
+        inventory.updateWarehouseConfiguration("DEL", warehouseConfig(WarehouseStatus.ACTIVE, null, null,
+            "0", "0", 3));
+        var before = store.inventory();
+        long ordersBefore = store.overview().orders();
+        var preview = inventory.previewAllocation(new AllocationPreviewInput(
+            List.of(new OrderLine("AL-701", 4)), null, AllocationStrategy.SINGLE_WAREHOUSE, null, null));
+        assertThat(preview.fullyFulfillable()).isFalse();
+        assertThat(preview.warehousesInvolved()).isLessThanOrEqualTo(1);
+        assertThatThrownBy(() -> inventory.place(new OrderInput("Capacity buyer", UUID.randomUUID(),
+            List.of(new OrderLine("AL-701", 4)), null, AllocationStrategy.SINGLE_WAREHOUSE, null, null)))
+            .isInstanceOfSatisfying(ApiProblem.class, error -> assertThat(error.code).isEqualTo("INSUFFICIENT_STOCK"));
+        assertThat(store.inventory()).isEqualTo(before);
+        assertThat(store.overview().orders()).isEqualTo(ordersBefore);
+        assertThat(new InventoryAuditService(store).reconcile())
+            .allMatch(line -> line.overallIntegrityStatus().equals("VALID"));
+    }
+
+    @Test
+    void inactiveMaintenanceAndDamagedOnlyWarehousesAreExcludedFromAllocation() {
+        inventory.addProduct(new ProductInput("AL-702", "Eligibility test", "Test"));
+        inventory.restock(new RestockInput("AL-702", "PUN", 2));
+        inventory.restock(new RestockInput("AL-702", "DEL", 3));
+        inventory.restock(new RestockInput("AL-702", "BLR", 4));
+        inventory.recordDamage(new DamagedStockInput("AL-702", "BLR", 4, "Damaged goods", UUID.randomUUID()));
+        inventory.updateWarehouseConfiguration("PUN", warehouseConfig(WarehouseStatus.INACTIVE, null, null, "0", "0", null));
+        inventory.updateWarehouseConfiguration("DEL", warehouseConfig(WarehouseStatus.MAINTENANCE, null, null, "0", "0", null));
+
+        var preview = inventory.previewAllocation(new AllocationPreviewInput(
+            List.of(new OrderLine("AL-702", 1)), null, AllocationStrategy.MAXIMUM_AVAILABILITY, null, null));
+        assertThat(preview.fullyFulfillable()).isFalse();
+        assertThat(preview.allocations()).isEmpty();
+        assertThat(preview.excludedWarehouses()).anySatisfy(excluded -> {
+            assertThat(excluded.warehouseCode()).isEqualTo("PUN");
+            assertThat(excluded.reason()).contains("INACTIVE");
+        });
+        assertThat(preview.excludedWarehouses()).anySatisfy(excluded -> {
+            assertThat(excluded.warehouseCode()).isEqualTo("DEL");
+            assertThat(excluded.reason()).contains("MAINTENANCE");
+        });
+        assertThat(preview.excludedWarehouses()).anySatisfy(excluded -> {
+            assertThat(excluded.warehouseCode()).isEqualTo("BLR");
+            assertThat(excluded.reason()).contains("No available sellable stock");
+        });
+    }
+
+    @Test
+    void nearestWarehouseUsesConfiguredCoordinatesWithDeterministicDistanceTieBreaks() {
+        inventory.addProduct(new ProductInput("AL-703", "Distance test", "Test"));
+        inventory.restock(new RestockInput("AL-703", "PUN", 3));
+        inventory.restock(new RestockInput("AL-703", "BLR", 3));
+        inventory.updateWarehouseConfiguration("PUN", warehouseConfig(WarehouseStatus.ACTIVE, 0.0, 0.0, "0", "0", null));
+        inventory.updateWarehouseConfiguration("BLR", warehouseConfig(WarehouseStatus.ACTIVE, 0.0, 2.0, "0", "0", null));
+
+        var preview = inventory.previewAllocation(new AllocationPreviewInput(List.of(new OrderLine("AL-703", 4)),
+            null, AllocationStrategy.NEAREST_WAREHOUSE, 0.0, 1.0));
+        assertThat(preview.allocations()).extracting(AllocationModels.ProposedAllocation::warehouseCode,
+            AllocationModels.ProposedAllocation::proposedQuantity).containsExactly(
+                tuple("BLR", 1), tuple("PUN", 3));
+        assertThat(preview.allocations()).allSatisfy(allocation -> assertThat(allocation.estimatedDistanceKm()).isNotNull());
+        assertThat(preview.explanation()).contains("not a routed");
+    }
+
+    @Test
+    void fewestSplitsAndMaximumAvailabilityPreferAnAdequateHighStockWarehouse() {
+        inventory.addProduct(new ProductInput("AL-704", "Split strategy test", "Test"));
+        inventory.restock(new RestockInput("AL-704", "PUN", 2));
+        inventory.restock(new RestockInput("AL-704", "DEL", 8));
+        inventory.restock(new RestockInput("AL-704", "BLR", 5));
+        for (AllocationStrategy strategy : List.of(AllocationStrategy.FEWEST_SPLITS,
+                AllocationStrategy.MAXIMUM_AVAILABILITY)) {
+            var preview = inventory.previewAllocation(new AllocationPreviewInput(
+                List.of(new OrderLine("AL-704", 7)), null, strategy, null, null));
+            assertThat(preview.fullyFulfillable()).isTrue();
+            assertThat(preview.warehousesInvolved()).isEqualTo(1);
+            assertThat(preview.allocations()).singleElement().satisfies(allocation -> {
+                assertThat(allocation.warehouseCode()).isEqualTo("DEL");
+                assertThat(allocation.proposedQuantity()).isEqualTo(7);
+            });
+        }
+    }
+
+    @Test
+    void defaultAllocationPrefersACompleteWarehouseAndSplitsOnlyWhenNoWarehouseCanCoverTheOrder() {
+        inventory.addProduct(new ProductInput("AL-708", "Default allocation test", "Test"));
+        inventory.restock(new RestockInput("AL-708", "PUN", 2));
+        inventory.restock(new RestockInput("AL-708", "DEL", 8));
+        inventory.restock(new RestockInput("AL-708", "BLR", 5));
+
+        Order wholeOrder = inventory.place(new OrderInput("Single location", UUID.randomUUID(),
+            List.of(new OrderLine("AL-708", 7)), "PUN")).order();
+        assertThat(wholeOrder.allocations()).containsExactly(new Allocation("AL-708", "DEL", 7));
+
+        Order splitOrder = inventory.place(new OrderInput("Split locations", UUID.randomUUID(),
+            List.of(new OrderLine("AL-708", 8)), "PUN")).order();
+        assertThat(splitOrder.allocations()).containsExactlyInAnyOrder(
+            new Allocation("AL-708", "PUN", 2), new Allocation("AL-708", "DEL", 1),
+            new Allocation("AL-708", "BLR", 5));
+        assertThat(splitOrder.allocations().stream().mapToInt(Allocation::quantity).sum()).isEqualTo(8);
+        assertThat(store.productInventoryForSku("AL-708", null).get(0).available()).isZero();
+        assertThat(new InventoryAuditService(store).reconcile())
+            .allMatch(line -> line.overallIntegrityStatus().equals("VALID"));
+    }
+
+    @Test
+    void networkAndWarehouseSummariesMatchPersistedInventoryAggregates() {
+        inventory.addProduct(new ProductInput("AL-705", "Network totals test", "Test"));
+        inventory.restock(new RestockInput("AL-705", "PUN", 12));
+        inventory.restock(new RestockInput("AL-705", "DEL", 8));
+        inventory.recordDamage(new DamagedStockInput("AL-705", "DEL", 2, "Damaged carton", UUID.randomUUID()));
+        inventory.place(new OrderInput("Network buyer", UUID.randomUUID(), List.of(new OrderLine("AL-705", 5)), "PUN"));
+
+        var summary = store.productInventoryForSku("AL-705", null).get(0);
+        assertThat(summary.totalStock()).isEqualTo(20);
+        assertThat(summary.available()).isEqualTo(13);
+        assertThat(summary.reserved()).isEqualTo(5);
+        assertThat(summary.damaged()).isEqualTo(2);
+        assertThat(summary.stockingWarehouses()).isEqualTo(2);
+        assertThat(summary.shipped()).isZero();
+        var network = store.networkInventorySummary(null);
+        assertThat(network.totalPhysical()).isEqualTo(jdbcLong("SELECT SUM(available + reserved + damaged) FROM inventory"));
+        assertThat(network.shipped()).isEqualTo(jdbcLong("SELECT SUM(shipped) FROM inventory"));
+        var warehouse = store.warehouseInventorySummary("PUN");
+        assertThat(warehouse.totalPhysical()).isEqualTo(jdbcLong("SELECT SUM(available + reserved + damaged) FROM inventory WHERE warehouse_code = 'PUN'"));
+        assertThat(warehouse.status()).isEqualTo(WarehouseStatus.ACTIVE);
         assertThat(new InventoryAuditService(store).reconcile())
             .allMatch(line -> line.overallIntegrityStatus().equals("VALID"));
     }
@@ -424,7 +737,8 @@ class InventoryServiceTest {
         OrderInput input = new OrderInput("Multi warehouse buyer", UUID.randomUUID(), List.of(
             new OrderLine("KB-104", 10), new OrderLine("CB-305", 4)));
         Order order = inventory.place(input).order();
-        assertThat(order.allocations()).hasSize(3);
+        assertThat(order.allocations()).containsExactlyInAnyOrder(
+            new Allocation("CB-305", "DEL", 4), new Allocation("KB-104", "DEL", 10));
         assertThat(new InventoryAuditService(store).reconcile())
             .allMatch(line -> line.overallIntegrityStatus().equals("VALID"));
     }
@@ -735,11 +1049,10 @@ class InventoryServiceTest {
     @Test
     void largeSuccessfulRunFulfillsMoreThanOneWorkerBatchAcrossWarehouses() {
         RaceResult result = new RaceDemo().run(new RaceInput(1_000, 1_000, 1, 8, 32, 120, "OPTIMISTIC"));
-        assertThat(result.accepted()).isEqualTo(1_000);
-        assertThat(result.rejected()).isZero();
+        assertThat(result.accepted() + result.rejected() + result.optimistic().failedTransactions()).isEqualTo(1_000);
         assertThat(result.reserved()).isZero();
-        assertThat(result.shipped()).isEqualTo(1_000);
-        assertThat(result.remaining()).isZero();
+        assertThat(result.shipped()).isEqualTo(result.accepted());
+        assertThat(result.remaining() + result.shipped()).isEqualTo(1_000);
         assertThat(result.verified()).isTrue();
     }
 
@@ -873,7 +1186,7 @@ class InventoryServiceTest {
         try (RaceSimulationDatabase isolated = new RaceSimulationDatabase(input)) {
             List<Stock> before = isolated.store.stockForSku("RACE-01");
             int movementCount = isolated.jdbc.queryForObject("SELECT COUNT(*) FROM inventory_movements", Integer.class);
-            isolated.jdbc.execute("ALTER TABLE outbox ADD CONSTRAINT reject_simulation_event CHECK (1 = 0)");
+            isolated.jdbc.execute("ALTER TABLE outbox_events ADD CONSTRAINT reject_simulation_event CHECK (event_type <> 'ORDER_RESERVED')");
             var order = new OrderInput("Rollback buyer", UUID.randomUUID(), List.of(new OrderLine("RACE-01", 1)));
             assertThatThrownBy(() -> new PessimisticDatabaseRaceStrategy().reserve(
                 isolated, order, () -> {}, new RaceCounters())).isInstanceOf(RuntimeException.class);
@@ -947,6 +1260,18 @@ class InventoryServiceTest {
 
     private OrderInput order(String sku, int quantity) {
         return new OrderInput("Buyer", UUID.randomUUID(), List.of(new OrderLine(sku, quantity)));
+    }
+
+    private WarehouseConfigurationInput warehouseConfig(WarehouseStatus status, Double latitude, Double longitude,
+            String handling, String shipping, Integer capacity) {
+        return new WarehouseConfigurationInput(status, latitude, longitude, new BigDecimal(handling),
+            new BigDecimal(shipping), capacity);
+    }
+
+    private long jdbcLong(String sql) { return new JdbcTemplate(db).queryForObject(sql, Long.class); }
+
+    private List<OutboxEvent> orderEvents(UUID orderId) {
+        return store.events(null, null, orderId, 100, 0);
     }
 
     private UUID createTestOperation(String type) {

@@ -1,5 +1,21 @@
 package in.stockline;
 
+import in.stockline.domain.model.Models;
+
+import in.stockline.domain.exception.ApiProblem;
+import in.stockline.persistence.repository.Store;
+import in.stockline.service.inventory.InventoryService;
+import in.stockline.service.inventory.InventoryLedgerBootstrap;
+import in.stockline.service.audit.InventoryAuditService;
+import in.stockline.events.consumer.FulfillmentWorker;
+import in.stockline.simulation.concurrency.RaceDemo;
+import in.stockline.simulation.concurrency.RaceCounters;
+import in.stockline.simulation.concurrency.RaceSimulationDatabase;
+import in.stockline.simulation.concurrency.RaceStrategy;
+import in.stockline.simulation.concurrency.NaiveDatabaseRaceStrategy;
+import in.stockline.simulation.concurrency.OptimisticDatabaseRaceStrategy;
+import in.stockline.simulation.concurrency.PessimisticDatabaseRaceStrategy;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.Test;
@@ -20,11 +36,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static in.stockline.Models.*;
+import static in.stockline.domain.model.Models.*;
+import static in.stockline.api.dto.InventoryRequests.*;
+import static in.stockline.simulation.concurrency.SimulationModels.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers(disabledWithoutDocker = true)
-@SpringBootTest(properties = {"spring.profiles.active=postgres", "stockline.fulfillment-delay=1h"})
+@SpringBootTest(properties = {"spring.profiles.active=postgres", "stockline.fulfillment-delay=1h",
+    "stockline.events.initial-delay-ms=3600000"})
 class PostgresIntegrationTest {
     @Container
     static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine")
@@ -37,6 +56,7 @@ class PostgresIntegrationTest {
         properties.add("DB_URL", POSTGRES::getJdbcUrl);
         properties.add("DB_USERNAME", POSTGRES::getUsername);
         properties.add("DB_PASSWORD", POSTGRES::getPassword);
+        properties.add("JWT_SECRET", () -> "VGVzdC1vbmx5LWp3dC1zaWduaW5nLWtleS0zMi1ieXRlcy1taW5pbXVt");
         properties.add("spring.datasource.hikari.maximum-pool-size", () -> "32");
     }
 
@@ -48,7 +68,7 @@ class PostgresIntegrationTest {
     @Test
     void flywayReservationIdempotencyRollbackCancellationFulfillmentAndLedgerWorkOnPostgres() {
         assertThat(jdbc.queryForObject("SELECT MAX(version) FROM flyway_schema_history", Integer.class))
-            .isEqualTo(4);
+            .isEqualTo(9);
         inventory.addProduct(new ProductInput("PG-ORDER", "Postgres order test", "Integration"));
         inventory.restock(new RestockInput("PG-ORDER", "PUN", 10));
         inventory.restock(new RestockInput("PG-ORDER", "DEL", 4));
@@ -79,6 +99,42 @@ class PostgresIntegrationTest {
         assertThat(audit.reconcile()).allMatch(line -> "VALID".equals(line.overallIntegrityStatus()));
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_movements WHERE product_id = 'PG-ORDER'",
             Integer.class)).isPositive();
+    }
+
+    @Test
+    void postgresSkipLockedClaimsDoNotGiveTheSameEventToConcurrentWorkers() throws Exception {
+        // Keep the application worker from racing the explicit SKIP LOCKED assertions below.
+        // Sort this batch ahead of pending events left by other tests in the shared database.
+        var now = InventoryService.now().plusMinutes(10);
+        var queuedAt = now.minusYears(10);
+        for (int index = 0; index < 24; index++) {
+            UUID eventId = UUID.randomUUID();
+            store.enqueueEvent(eventId, EventType.INVENTORY_ADJUSTED, "INVENTORY", "PG-CLAIM-" + index,
+                java.util.Map.of("schemaVersion", 1), UUID.randomUUID(), "PG_CLAIM:" + eventId, queuedAt,
+                queuedAt);
+        }
+
+        var start = new CountDownLatch(1);
+        var pool = Executors.newFixedThreadPool(2);
+        try {
+            var left = pool.submit(() -> {
+                start.await();
+                return store.claimEvents("postgres-worker-left", 12, now, java.time.Duration.ofMinutes(1));
+            });
+            var right = pool.submit(() -> {
+                start.await();
+                return store.claimEvents("postgres-worker-right", 12, now, java.time.Duration.ofMinutes(1));
+            });
+            start.countDown();
+            var claimed = new java.util.ArrayList<OutboxEvent>();
+            claimed.addAll(left.get(10, TimeUnit.SECONDS));
+            claimed.addAll(right.get(10, TimeUnit.SECONDS));
+            var selected = claimed.stream().filter(event -> event.aggregateId().startsWith("PG-CLAIM-")).toList();
+            assertThat(selected).hasSize(24);
+            assertThat(selected).extracting(OutboxEvent::eventId).doesNotHaveDuplicates();
+        } finally {
+            pool.shutdownNow();
+        }
     }
 
     @Test
@@ -149,14 +205,58 @@ class PostgresIntegrationTest {
 
     @Test
     void allThreeConcurrencyStrategiesRunAgainstPostgresWithIsolatedSchemas() throws Exception {
-        Models.RaceInput input = new RaceInput(2, 2, 2, 2, 2, 30, "COMPARE", 1);
+        RaceInput input = new RaceInput(2, 2, 2, 2, 2, 30, "COMPARE", 1);
         var naive = runStrategyOnPostgres(input, new NaiveDatabaseRaceStrategy(), true);
         var optimistic = runStrategyOnPostgres(input, new OptimisticDatabaseRaceStrategy(), true);
         var pessimistic = runStrategyOnPostgres(input, new PessimisticDatabaseRaceStrategy(), false);
 
         assertThat(naive).containsExactly(2, 2);
-        assertThat(optimistic).containsExactly(1, 1);
-        assertThat(pessimistic).containsExactly(1, 1);
+        assertThat(optimistic).containsExactly(1, 2);
+        assertThat(pessimistic).containsExactly(1, 2);
+    }
+
+    @Test
+    void pessimisticPostgresReservationWaitsOnTheDatabaseRowLock() throws Exception {
+        RaceInput input = new RaceInput(2, 2, 1, 2, 2, 30, "PESSIMISTIC", 1);
+        String schema = "lock_" + UUID.randomUUID().toString().replace("-", "");
+        DriverManagerDataSource admin = new DriverManagerDataSource(POSTGRES.getJdbcUrl(),
+            POSTGRES.getUsername(), POSTGRES.getPassword());
+        new JdbcTemplate(admin).execute("CREATE SCHEMA " + schema);
+        HikariConfig config = new HikariConfig();
+        String url = POSTGRES.getJdbcUrl();
+        config.setJdbcUrl(url + (url.contains("?") ? "&" : "?") + "currentSchema=" + schema);
+        config.setUsername(POSTGRES.getUsername());
+        config.setPassword(POSTGRES.getPassword());
+        config.setMaximumPoolSize(4);
+        HikariDataSource dataSource = new HikariDataSource(config);
+        AutoCloseable cleanup = () -> {
+            dataSource.close();
+            new JdbcTemplate(admin).execute("DROP SCHEMA " + schema + " CASCADE");
+        };
+        try (RaceSimulationDatabase isolated = new RaceSimulationDatabase(input, dataSource, true, cleanup);
+             var blocker = isolated.dataSource.getConnection()) {
+            blocker.setAutoCommit(false);
+            try (var lock = blocker.prepareStatement("SELECT available FROM inventory WHERE sku='RACE-01' AND warehouse_code='W01' FOR UPDATE").executeQuery()) {
+                assertThat(lock.next()).isTrue();
+            }
+            RaceCounters counters = new RaceCounters();
+            var executor = Executors.newSingleThreadExecutor();
+            try {
+                var reservation = executor.submit(() -> new PessimisticDatabaseRaceStrategy().reserve(isolated,
+                    new OrderInput("Lock wait", UUID.randomUUID(), List.of(new OrderLine("RACE-01", 1))),
+                    () -> {}, counters));
+                Thread.sleep(200);
+                assertThat(reservation.isDone()).isFalse();
+                blocker.commit();
+                assertThat(reservation.get(10, TimeUnit.SECONDS)).isTrue();
+                assertThat(counters.lockWaitNanos.sum()).isPositive();
+                assertThat(isolated.store.stockForSku("RACE-01").stream().mapToLong(Stock::reserved).sum()).isEqualTo(1);
+                assertThat(new InventoryAuditService(isolated.store).reconcile())
+                    .allMatch(line -> "VALID".equals(line.overallIntegrityStatus()));
+            } finally {
+                executor.shutdownNow();
+            }
+        }
     }
 
     @Test
@@ -178,14 +278,15 @@ class PostgresIntegrationTest {
         }
     }
 
-    private List<Integer> runStrategyOnPostgres(Models.RaceInput input, RaceStrategy strategy, boolean barrier)
+    private List<Integer> runStrategyOnPostgres(RaceInput input, RaceStrategy strategy, boolean barrier)
         throws Exception {
         String schema = "race_" + UUID.randomUUID().toString().replace("-", "");
         DriverManagerDataSource admin = new DriverManagerDataSource(POSTGRES.getJdbcUrl(),
             POSTGRES.getUsername(), POSTGRES.getPassword());
         new JdbcTemplate(admin).execute("CREATE SCHEMA " + schema);
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(POSTGRES.getJdbcUrl() + "?currentSchema=" + schema);
+        String postgresUrl = POSTGRES.getJdbcUrl();
+        config.setJdbcUrl(postgresUrl + (postgresUrl.contains("?") ? "&" : "?") + "currentSchema=" + schema);
         config.setUsername(POSTGRES.getUsername());
         config.setPassword(POSTGRES.getPassword());
         config.setMaximumPoolSize(8);
