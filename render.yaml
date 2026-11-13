@@ -2,8 +2,8 @@ services:
   - type: web
     name: stockline
     runtime: docker
-    plan: 0.5c-512mb
-    region: singapore
+    plan: free
+    region: oregon
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /actuator/health/readiness
@@ -32,14 +32,10 @@ services:
       - key: STOCKLINE_SECURE_COOKIE
         value: "true"
       - key: DB_POOL_MAX
-        value: "24"
+        value: "8"
       - key: DB_POOL_MIN_IDLE
-        value: "4"
-
-databases:
-  - name: stockline-db
-    databaseName: stockline
-    user: stockline
-    plan: 0.5c-1g
-    region: singapore
-    postgresMajorVersion: "16"
+        value: "1"
+      - key: SERVER_TOMCAT_MAX_THREADS
+        value: "50"
+      - key: SERVER_TOMCAT_MIN_SPARE_THREADS
+        value: "5"

@@ -10,4 +10,4 @@ case "${DB_URL:-}" in
         ;;
 esac
 
-exec java -XX:MaxRAMPercentage=75 -jar /app/stockline.jar "$@"
+exec java -XX:MaxRAMPercentage=60 -jar /app/stockline.jar "$@"
