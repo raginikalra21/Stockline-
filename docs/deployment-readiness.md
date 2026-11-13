@@ -12,7 +12,7 @@ The production JAR excludes H2 and test-only settings. Local demo credentials ar
 
 ## Verification
 
-- `mvn clean verify`: **85 tests run**, no failures or errors; **7 Docker-dependent tests skipped** because the Docker socket was inaccessible in this session.
+- `mvn clean verify`: **85 tests passed**, with no failures, errors, or skips. This run used Docker Desktop for the PostgreSQL Testcontainers tests.
 - `node --check src/main/resources/static/app.js`: passed.
 - `git diff --check`: passed.
 - `render.yaml`: parsed as valid YAML; it contains only the web service and points to the existing database by name. Render's Blueprint preview is still needed to confirm the account-level sync plan.
